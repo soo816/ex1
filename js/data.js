@@ -189,3 +189,111 @@ const koreanPhrases = [
     category: "Emergency"
   }
 ];
+
+const regionalGourmetData = {
+  north: {
+    regionEn: "Jeju City & North Coast",
+    regionKo: "제주시 & 북부 (공항 근처)",
+    descEn: "Famous for Pork Noodle (Gogi Guksu), Black Pork Street, and Dongmun Traditional Night Market.",
+    descKo: "고기국수 거리, 흑돼지 거리, 동문재래시장 야시장이 위치한 대표 식도락 지역.",
+    spots: [
+      {
+        nameEn: "Jeju Pork Noodle Street (Gogi Guksu)",
+        nameKo: "제주 고기국수 (자매국수/삼도동)",
+        specialty: "Rich Pork Broth Noodles",
+        addressKo: "제주특별자치도 제주시 탑동로 11",
+        addressEn: "11 Tapdong-ro, Jeju-si, Jeju-do",
+        desc: "Deep, savory pork bone broth served with thick noodles and tender sliced pork belly.",
+        price: "9,000 - 11,000 KRW"
+      },
+      {
+        nameEn: "Dongmun Night Market Seafood",
+        nameKo: "동문재래시장 해산물 & 야시장",
+        specialty: "Fresh Sashimi & Street Food",
+        addressKo: "제주특별자치도 제주시 관덕로14길 20",
+        addressEn: "20 Gwandeok-ro 14-gil, Jeju-si, Jeju-do",
+        desc: "Taste fresh raw fish sets, abalone butter rice, and famous orange desserts at affordable prices.",
+        price: "10,000 - 25,000 KRW"
+      }
+    ]
+  },
+  south: {
+    regionEn: "Seogwipo & South Coast",
+    regionKo: "서귀포시 & 남부 (중문관광단지)",
+    descEn: "Renowned for Fresh Sea Bream, Seogwipo Olle Market, and Premium BBQ.",
+    descKo: "서귀포 매일올레시장, 중문 흑돼지 구이, 옥돔구이와 해물탕이 유명한 남부 미식 지대.",
+    spots: [
+      {
+        nameEn: "Seogwipo Everyday Olle Market",
+        nameKo: "서귀포 매일올레시장",
+        specialty: "Omegi Rice Cake & Fresh Fish",
+        addressKo: "제주특별자치도 서귀포시 중앙로62번길 18",
+        addressEn: "18 Jungang-ro 62beon-gil, Seogwipo-si, Jeju-do",
+        desc: "Famous for traditional Omegi bean rice cakes, fried garlic chicken, and fresh yellowtail sashimi.",
+        price: "5,000 - 30,000 KRW"
+      },
+      {
+        nameEn: "Jungmun Seafood Hotpot",
+        nameKo: "중문 해물뚝배기 & 갈치조림",
+        specialty: "Seafood Stew & Braised Hairtail",
+        addressKo: "제주특별자치도 서귀포시 중문관광로 32",
+        addressEn: "32 Jungmungwangwang-ro, Seogwipo-si, Jeju-do",
+        desc: "Loaded with fresh abalone, crab, and octopus simmered in a spicy soybean broth.",
+        price: "18,000 - 45,000 KRW"
+      }
+    ]
+  },
+  east: {
+    regionEn: "East Coast (Seongsan & Gujwa)",
+    regionKo: "동부 (성산, 구좌, 조천)",
+    descEn: "Famous for Sea Snail Noodle (Bomal), Haenyeo Seafood, and Gujwa Carrot Cake.",
+    descKo: "성산일출봉 근처 보말칼국수, 해녀 해산물 뚝배기, 구좌 당근 카페거리가 위치한 동부.",
+    spots: [
+      {
+        nameEn: "Seongsan Sea Snail Noodle (Bomal Kalguksu)",
+        nameKo: "성산 보말칼국수 & 보말죽",
+        specialty: "Sea Snail Soup & Porridge",
+        addressKo: "제주특별자치도 서귀포시 성산읍 성산등용로 17",
+        addressEn: "17 Seongsandengyong-ro, Seongsan-eup, Seogwipo-si",
+        desc: "Healthy green seaweed and sea snail noodle soup packed with natural ocean flavors.",
+        price: "10,000 - 13,000 KRW"
+      },
+      {
+        nameEn: "Gujwa Carrot Dessert Cafe",
+        nameKo: "구좌 당근 카페 (당근케이크)",
+        specialty: "Organic Jeju Carrot Cake & Juice",
+        addressKo: "제주특별자치도 제주시 구좌읍 해맞이해안로 1112",
+        addressEn: "1112 Haemajihaean-ro, Gujwa-eup, Jeju-si",
+        desc: "Gujwa is Korea's carrot capital! Enjoy rich organic carrot cakes overlooking the east sea.",
+        price: "7,000 - 9,000 KRW"
+      }
+    ]
+  },
+  west: {
+    regionEn: "West Coast (Aewol & Hallim)",
+    regionKo: "서부 (애월, 한림, 대정)",
+    descEn: "Famous for Aewol Cafe Street, Grilled Hairtail, and Sunset Seafood Dining.",
+    descKo: "애월 한담 해안 산책로 카페거리, 협재 통갈치구이, 에메랄드 노울 뷰 디저트로 유명한 서부.",
+    spots: [
+      {
+        nameEn: "Aewol Ocean View Cafe Street",
+        nameKo: "애월 한담 카페거리",
+        specialty: "Ocean View Coffee & Tangerine Tart",
+        addressKo: "제주특별자치도 제주시 애월읍 애월북서길 56",
+        addressEn: "56 Aewolbukseo-gil, Aewol-eup, Jeju-si",
+        desc: "Enjoy specialty coffee and fruit desserts with front-row seats to Jeju's mesmerizing western sunset.",
+        price: "6,500 - 12,000 KRW"
+      },
+      {
+        nameEn: "Hyeopjae Whole Grilled Hairtail",
+        nameKo: "협재 통갈치구이",
+        specialty: "1-Meter Whole Salted Hairtail",
+        addressKo: "제주특별자치도 제주시 한림읍 한림로 340",
+        addressEn: "340 Hallim-ro, Hallim-eup, Jeju-si",
+        desc: "A giant 1-meter long silver hairtail fish roasted with sea salt. Impressive visual and delicious taste.",
+        price: "50,000 - 80,000 KRW (For 2-3 people)"
+      }
+    ]
+  }
+};
+

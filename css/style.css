@@ -777,6 +777,120 @@ footer {
   border-top: 1px solid var(--border-glass);
 }
 
+/* Jeju Gourmet Regional Food Map Styles */
+.gourmet-container {
+  padding: 32px;
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 30px;
+  align-items: center;
+}
+
+.gourmet-map-graphic {
+  background: rgba(10, 17, 30, 0.6);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  border: 1px solid var(--border-glass);
+  text-align: center;
+}
+
+.jeju-svg-map {
+  width: 100%;
+  max-width: 440px;
+  height: auto;
+  overflow: visible;
+}
+
+.map-pin-group {
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.map-pin-group:hover {
+  transform: scale(1.18);
+}
+
+.pin-circle {
+  fill: var(--jeju-tangerine);
+  stroke: #ffffff;
+  stroke-width: 2.5px;
+  filter: drop-shadow(0 4px 10px rgba(255, 123, 0, 0.6));
+  transition: fill 0.2s;
+}
+
+.map-pin-group:hover .pin-circle {
+  fill: var(--jeju-canola);
+}
+
+.gourmet-region-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.gourmet-tab {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-glass);
+  color: var(--text-muted);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.gourmet-tab.active {
+  background: linear-gradient(135deg, var(--jeju-tangerine), var(--jeju-canola));
+  color: #000;
+  border-color: transparent;
+  box-shadow: 0 4px 15px rgba(255, 123, 0, 0.4);
+}
+
+.gourmet-food-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  margin-bottom: 16px;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.gourmet-food-card:hover {
+  transform: translateX(4px);
+  border-color: var(--jeju-ocean);
+}
+
+.gourmet-food-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.gourmet-food-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.gourmet-food-tag {
+  background: rgba(0, 168, 150, 0.2);
+  border: 1px solid var(--jeju-ocean);
+  color: var(--jeju-ocean);
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+@media (max-width: 868px) {
+  .gourmet-container {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Responsive Media Queries */
 @media (max-width: 768px) {
   .hero-title {

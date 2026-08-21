@@ -47,6 +47,13 @@ const i18n = {
 
     calcTitle: "Currency & Budget Calculator",
     calcSub: "Quickly convert Korean Won (KRW) to your home currency.",
+
+    gourmetTitle: "Jeju Gourmet Map by Region",
+    gourmetSub: "Explore iconic local food hotspots based on Jeju's 4 geographical regions.",
+    regionNorth: "Jeju City (North)",
+    regionSouth: "Seogwipo (South)",
+    regionEast: "East (Seongsan)",
+    regionWest: "West (Aewol)",
     krwInput: "South Korean Won (KRW)",
     usdLabel: "US Dollar (USD)",
     eurLabel: "Euro (EUR)",
@@ -112,6 +119,13 @@ const i18n = {
 
     calcTitle: "환율 및 여행 예산 계산기",
     calcSub: "원화(KRW) 금액을 자국 통화로 빠르게 환산해 보세요.",
+
+    gourmetTitle: "제주 지역별 맛집 지도",
+    gourmetSub: "제주도의 4대 지역(제주시, 서귀포, 동부, 서부) 대표 식도락 명소를 탐색하세요.",
+    regionNorth: "제주시 (북부)",
+    regionSouth: "서귀포 (남부)",
+    regionEast: "성산/구좌 (동부)",
+    regionWest: "애월/한림 (서부)",
     krwInput: "대한민국 원 (KRW)",
     usdLabel: "미국 달러 (USD)",
     eurLabel: "유로화 (EUR)",
@@ -177,6 +191,13 @@ const i18n = {
 
     calcTitle: "汇率与预算计算器",
     calcSub: "快速将韩元 (KRW) 换算为您的常用货币。",
+
+    gourmetTitle: "济州各区域美食地图",
+    gourmetSub: "探索济州岛4大区域（济州市、西归浦、东部、西部）代表性特色美食。",
+    regionNorth: "济州市 (北部)",
+    regionSouth: "西归浦 (南部)",
+    regionEast: "城山/旧左 (东部)",
+    regionWest: "崖月/翰林 (西部)",
     krwInput: "韩元 (KRW)",
     usdLabel: "美元 (USD)",
     eurLabel: "欧元 (EUR)",

@@ -4,6 +4,7 @@
 let currentLang = 'en';
 let activeCategory = 'all';
 let searchQuery = '';
+let activeGourmetRegion = 'north';
 let savedSpotIds = JSON.parse(localStorage.getItem('jeju_saved_spots')) || [];
 
 // Currency Rates (1 KRW equivalent)
@@ -19,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initLanguage();
   renderPhrases();
   renderAttractions();
+  renderGourmetRegion(activeGourmetRegion);
   updateItineraryBadge();
   setupEventListeners();
   initCurrencyConverter();
@@ -59,6 +61,7 @@ function onLanguageChange() {
   updateLanguageToggleUI();
   renderAttractions();
   renderPhrases();
+  renderGourmetRegion(activeGourmetRegion);
   renderItineraryList();
 }
 
@@ -73,6 +76,62 @@ function updateLanguageToggleUI() {
       label.textContent = "English ↔ 한국어";
     }
   }
+}
+
+// Regional Gourmet Food Map Handler
+function selectGourmetRegion(regionKey) {
+  activeGourmetRegion = regionKey;
+  
+  // Update Tab Button Active State
+  document.querySelectorAll('.gourmet-tab').forEach(tab => {
+    if (tab.getAttribute('data-region') === regionKey) {
+      tab.classList.add('active');
+    } else {
+      tab.classList.remove('active');
+    }
+  });
+
+  renderGourmetRegion(regionKey);
+}
+
+function renderGourmetRegion(regionKey) {
+  const container = document.getElementById('gourmetContent');
+  if (!container) return;
+
+  const data = regionalGourmetData[regionKey];
+  if (!data) return;
+
+  const regionTitle = currentLang === 'ko' ? data.regionKo : data.regionEn;
+  const regionDesc = currentLang === 'ko' ? data.descKo : data.descEn;
+  const dict = i18n[currentLang] || i18n.en;
+
+  let html = `
+    <div style="margin-bottom: 20px;">
+      <h3 style="font-size: 1.35rem; color: var(--jeju-canola); font-weight: 800; margin-bottom: 4px;">
+        📍 ${regionTitle}
+      </h3>
+      <p style="font-size: 0.9rem; color: var(--text-muted);">${regionDesc}</p>
+    </div>
+  `;
+
+  html += data.spots.map(spot => {
+    const title = currentLang === 'ko' ? spot.nameKo : spot.nameEn;
+    return `
+      <div class="gourmet-food-card">
+        <div class="gourmet-food-header">
+          <div class="gourmet-food-title">${title}</div>
+          <span class="gourmet-food-tag">🍜 ${spot.specialty}</span>
+        </div>
+        <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 10px;">${spot.desc}</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-muted);">
+          <div>📍 ${spot.addressKo}</div>
+          <div style="font-weight: 800; color: var(--jeju-tangerine);">${spot.price}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  container.innerHTML = html;
 }
 
 function updateDOMTranslations() {

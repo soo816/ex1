@@ -103,6 +103,67 @@
       </div>
     </section>
 
+    <!-- Jeju Gourmet Map by Region Section -->
+    <section style="margin-top: 60px;">
+      <h2 class="section-title">
+        <span>🗺️</span> <span data-i18n="gourmetTitle">Jeju Gourmet Map by Region</span>
+      </h2>
+      <p class="section-sub" data-i18n="gourmetSub">Explore iconic local food hotspots based on Jeju's 4 geographical regions.</p>
+
+      <div class="gourmet-container glass-panel">
+        <!-- Interactive Map Graphic with 4 Region Hotspots -->
+        <div class="gourmet-map-graphic">
+          <svg viewBox="0 0 500 300" class="jeju-svg-map">
+            <!-- Jeju Island Basalt Outline -->
+            <path d="M 60,150 Q 120,60 250,70 Q 400,60 450,150 Q 420,240 260,250 Q 110,240 60,150 Z" 
+                  fill="rgba(0, 168, 150, 0.15)" stroke="var(--jeju-ocean)" stroke-width="3" filter="drop-shadow(0 0 12px rgba(0, 168, 150, 0.4))" />
+            
+            <!-- Mount Halla Icon Center -->
+            <circle cx="250" cy="150" r="16" fill="rgba(255, 195, 0, 0.25)" stroke="var(--jeju-canola)" stroke-width="2" />
+            <text x="250" y="155" text-anchor="middle" fill="#ffc300" font-size="11" font-weight="900">🌋 Hallasan</text>
+
+            <!-- Region Hotspot Pins -->
+            <!-- North Pin -->
+            <g class="map-pin-group" onclick="selectGourmetRegion('north')">
+              <circle cx="250" cy="95" r="18" class="pin-circle pin-north" />
+              <text x="250" y="100" text-anchor="middle" fill="#fff" font-size="12" font-weight="800">📍 北 (Jeju)</text>
+            </g>
+
+            <!-- South Pin -->
+            <g class="map-pin-group" onclick="selectGourmetRegion('south')">
+              <circle cx="250" cy="210" r="18" class="pin-circle pin-south" />
+              <text x="250" y="215" text-anchor="middle" fill="#fff" font-size="12" font-weight="800">📍 南 (Seogwipo)</text>
+            </g>
+
+            <!-- East Pin -->
+            <g class="map-pin-group" onclick="selectGourmetRegion('east')">
+              <circle cx="390" cy="150" r="18" class="pin-circle pin-east" />
+              <text x="390" y="155" text-anchor="middle" fill="#fff" font-size="12" font-weight="800">📍 東 (East)</text>
+            </g>
+
+            <!-- West Pin -->
+            <g class="map-pin-group" onclick="selectGourmetRegion('west')">
+              <circle cx="110" cy="150" r="18" class="pin-circle pin-west" />
+              <text x="110" y="155" text-anchor="middle" fill="#fff" font-size="12" font-weight="800">📍 西 (West)</text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Region Selector Tabs -->
+        <div class="gourmet-region-tabs">
+          <button class="gourmet-tab active" onclick="selectGourmetRegion('north')" data-region="north" data-i18n="regionNorth">Jeju City (North)</button>
+          <button class="gourmet-tab" onclick="selectGourmetRegion('south')" data-region="south" data-i18n="regionSouth">Seogwipo (South)</button>
+          <button class="gourmet-tab" onclick="selectGourmetRegion('east')" data-region="east" data-i18n="regionEast">East (Seongsan)</button>
+          <button class="gourmet-tab" onclick="selectGourmetRegion('west')" data-region="west" data-i18n="regionWest">West (Aewol)</button>
+        </div>
+
+        <!-- Dynamic Food Details Display -->
+        <div class="gourmet-content-box" id="gourmetContent">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+      </div>
+    </section>
+
     <!-- Tourist Korean Phrasebook Section -->
     <section style="margin-top: 60px;">
       <h2 class="section-title">
