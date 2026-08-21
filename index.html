@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Discover Jeju - Foreigner's Travel Buddy & Tourist Guide</title>
+  <meta name="description" content="Official Tourist Guide for Foreigners visiting Jeju Island. Features interactive attraction curation, taxi driver helper cards, Korean TTS speech, currency converter, and bus guides." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Header Navigation -->
+  <header style="padding: 10px 20px;">
+    <nav class="navbar glass-panel">
+      <a href="#" class="brand-box">
+        <span class="brand-icon">🍊</span>
+        <div>
+          <div class="brand-title" data-i18n="navTitle">Discover Jeju</div>
+          <div class="brand-sub" data-i18n="navSub">Foreigner's Travel Buddy</div>
+        </div>
+      </a>
+
+      <div class="nav-controls">
+        <!-- Quick English <-> Korean Toggle Button -->
+        <button class="btn-lang-toggle" id="langToggleBtn" onclick="toggleLanguage()" title="Switch Language / 언어 전환">
+          <span class="lang-icon">🌐</span>
+          <span id="langToggleLabel">English ↔ 한국어</span>
+        </button>
+
+        <!-- Full Language Select Dropdown -->
+        <div class="lang-select-wrapper">
+          <select id="langSelect" aria-label="Select Language">
+            <option value="en">🌐 English</option>
+            <option value="ko">🇰🇷 한국어</option>
+            <option value="zh">🇨🇳 中文</option>
+            <option value="ja">🇯🇵 日本語</option>
+          </select>
+        </div>
+
+        <!-- Saved Itinerary Badge Button -->
+        <button class="btn-itinerary-badge" onclick="openItineraryModal()">
+          <span>⭐</span>
+          <span data-i18n="navSaved">My Itinerary</span>
+          <span class="badge-count" id="itineraryCount">0</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+
+    <!-- Hero Section -->
+    <section class="hero-section glass-panel">
+      <img src="assets/hero.jpg" alt="Jeju Seongsan Ilchulbong" class="hero-bg" />
+      <div class="hero-overlay">
+        <div class="hero-badge">
+          <span>🌴</span> <span data-i18n="heroBadge">Jeju Island Official Tourist Guide</span>
+        </div>
+        <h1 class="hero-title" data-i18n="heroTitle">Experience the Wonder of Jeju Island</h1>
+        <p class="hero-subtitle" data-i18n="heroSubtitle">Your ultimate companion for hassle-free travel, Korean phrases, taxi helper, and local highlights.</p>
+        
+        <!-- Search Bar -->
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="Search Seongsan, beaches, black pork, cafes..." data-i18n-placeholder="searchPlaceholder" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Weather & Outfit Widget -->
+    <section class="weather-widget glass-panel">
+      <div class="weather-info">
+        <div class="weather-icon-big">🌤️</div>
+        <div>
+          <div class="weather-temp" data-i18n="weatherTemp">23°C (Sunny & Breezy)</div>
+          <div class="weather-desc" data-i18n="weatherTitle">Jeju Weather & Packing Tips</div>
+        </div>
+      </div>
+      <div class="packing-tip">
+        <span data-i18n="weatherDesc">Jeju is famous for strong coastal winds! A light jacket or windbreaker is highly recommended.</span>
+        <br />
+        <strong data-i18n="weatherTipHeader">Travel Tip:</strong>
+        <span data-i18n="weatherTipBody">Always keep an umbrella & sunglasses ready. Weather can change quickly near Mount Halla.</span>
+      </div>
+    </section>
+
+    <!-- Category Filters -->
+    <section>
+      <div class="filter-bar">
+        <button class="filter-btn active" data-category="all" data-i18n="filterAll">✨ All Spots</button>
+        <button class="filter-btn" data-category="nature" data-i18n="filterNature">🌋 UNESCO Nature</button>
+        <button class="filter-btn" data-category="culture" data-i18n="filterCulture">🏯 Culture & Heritage</button>
+        <button class="filter-btn" data-category="food" data-i18n="filterFood">🍊 Food & Cafes</button>
+        <button class="filter-btn" data-category="activity" data-i18n="filterActivity">🏄 Activities</button>
+      </div>
+    </section>
+
+    <!-- Attractions Grid -->
+    <section>
+      <div class="cards-grid" id="attractionGrid">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </section>
+
+    <!-- Tourist Korean Phrasebook Section -->
+    <section style="margin-top: 60px;">
+      <h2 class="section-title">
+        <span>🗣️</span> <span data-i18n="phraseTitle">Essential Tourist Korean & Audio Pronunciation</span>
+      </h2>
+      <p class="section-sub" data-i18n="phraseSub">Tap any phrase to listen to native Korean pronunciation powered by Speech Synthesis!</p>
+      
+      <div class="phrases-grid" id="phrasesGrid">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </section>
+
+    <!-- Transportation & Emergency Hotline -->
+    <section style="margin-top: 60px;">
+      <h2 class="section-title">
+        <span>🚨</span> <span data-i18n="transitTitle">Jeju Transportation & Emergency Hotline</span>
+      </h2>
+      <p class="section-sub">Essential contact info for smooth traveling across Jeju Island.</p>
+
+      <div class="transit-grid">
+        <!-- Hotline -->
+        <div class="transit-card glass-panel">
+          <h3 data-i18n="hotlineHeader">☎️ 1330 Korea Travel Hotline</h3>
+          <p data-i18n="hotlineDesc" style="color:var(--text-muted); font-size:0.9rem;">Free 24/7 travel advice and translation service in English, Chinese, Japanese & Russian.</p>
+          <a href="tel:1330" class="btn-hotline" data-i18n="callNow">Call 1330 Now</a>
+        </div>
+
+        <!-- Taxi Info -->
+        <div class="transit-card glass-panel">
+          <h3 data-i18n="taxiHeader">🚖 Jeju Taxi Tips</h3>
+          <p data-i18n="taxiDesc" style="color:var(--text-muted); font-size:0.9rem;">Standard taxis take T-Money cards & Credit cards. For airport rides, use Global Taxi service or Kakao T app.</p>
+        </div>
+
+        <!-- Bus Info -->
+        <div class="transit-card glass-panel">
+          <h3 data-i18n="busHeader">🚌 Bus 600 Limousine</h3>
+          <p data-i18n="busDesc" style="color:var(--text-muted); font-size:0.9rem;">Runs every 15-20 min from Jeju Airport to Jungmun Complex & Seogwipo resorts.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Currency & Budget Converter -->
+    <section class="calc-section glass-panel" style="margin-top: 50px;">
+      <h2 class="section-title" data-i18n="calcTitle">Currency & Budget Calculator</h2>
+      <p class="section-sub" data-i18n="calcSub">Quickly convert Korean Won (KRW) to your home currency.</p>
+
+      <div class="calc-grid">
+        <div class="calc-input-group">
+          <label for="krwAmount" data-i18n="krwInput">South Korean Won (KRW)</label>
+          <input type="number" id="krwAmount" value="50000" placeholder="50000" />
+        </div>
+
+        <div class="calc-results">
+          <div class="result-item">
+            <div class="result-currency" data-i18n="usdLabel">US Dollar (USD)</div>
+            <div class="result-value" id="valUSD">$37.50</div>
+          </div>
+          <div class="result-item">
+            <div class="result-currency" data-i18n="eurLabel">Euro (EUR)</div>
+            <div class="result-value" id="valEUR">€34.50</div>
+          </div>
+          <div class="result-item">
+            <div class="result-currency" data-i18n="cnyLabel">Chinese Yuan (CNY)</div>
+            <div class="result-value" id="valCNY">¥270.00</div>
+          </div>
+          <div class="result-item">
+            <div class="result-currency" data-i18n="jpyLabel">Japanese Yen (JPY)</div>
+            <div class="result-value" id="valJPY">¥5,500</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Taxi Driver Flashcard Modal -->
+  <div class="modal-overlay" id="taxiModal">
+    <div class="modal-content taxi-modal-box">
+      <button class="modal-close" onclick="closeAllModals()" style="color:#000;">✕</button>
+      <div class="taxi-modal-header" data-i18n="taxiModalTitle">Show This Screen to Your Taxi Driver!</div>
+      
+      <div style="font-size:0.9rem; color:#64748b; margin-bottom:10px;" data-i18n="takeMeTo">기사님, 여기로 가주세요:</div>
+      <div class="taxi-dest-ko" id="taxiModalDestKo">성산일출봉</div>
+      <div class="taxi-address-ko" id="taxiModalAddrKo">제주특별자치도 서귀포시 성산읍 일출로 284-12</div>
+      
+      <div class="taxi-dest-en" id="taxiModalDestEn">Seongsan Ilchulbong (Sunrise Peak)</div>
+      
+      <button onclick="playKoreanSpeech(document.getElementById('taxiModalDestKo').textContent + ' 가주세요')" style="margin-top:20px; background:#00b4d8; color:#fff; border:none; padding:12px 24px; border-radius:25px; font-weight:800; font-size:1rem; cursor:pointer;">
+        🔊 Read Aloud (음성으로 잃어주기)
+      </button>
+    </div>
+  </div>
+
+  <!-- My Saved Itinerary Modal -->
+  <div class="modal-overlay" id="itineraryModal">
+    <div class="modal-content glass-panel" style="background:#0f172a;">
+      <button class="modal-close" onclick="closeAllModals()">✕</button>
+      <h2 style="font-size:1.4rem; color:#fff; margin-bottom:20px;" data-i18n="itineraryTitle">My Saved Jeju Destinations</h2>
+      
+      <div id="itineraryList" style="margin-bottom:20px;">
+        <!-- Saved spots rendered here -->
+      </div>
+
+      <div style="display:flex; gap:12px; justify-content:flex-end;">
+        <button onclick="clearAllItinerary()" style="background:rgba(239, 68, 68, 0.2); border:1px solid #ef4444; color:#ef4444; padding:10px 18px; border-radius:10px; cursor:pointer; font-weight:700;" data-i18n="clearAll">
+          Delete All
+        </button>
+        <button onclick="printItinerary()" style="background:var(--primary-ocean); border:none; color:#fff; padding:10px 20px; border-radius:10px; cursor:pointer; font-weight:700;" data-i18n="printItinerary">
+          🖨️ Print / Save Plan
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div style="margin-bottom: 8px;">🍊 Discover Jeju Travel Companion &copy; 2026</div>
+    <div style="font-size: 0.78rem; opacity: 0.7;">Designed for global travelers visiting Jeju World Natural Heritage.</div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/i18n.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

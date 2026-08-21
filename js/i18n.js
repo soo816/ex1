@@ -1,0 +1,262 @@
+// i18n Dictionary for Discover Jeju
+const i18n = {
+  en: {
+    navTitle: "Discover Jeju",
+    navSub: "Foreigner's Travel Buddy",
+    navExplore: "Explore",
+    navPhrase: "Phrases & Audio",
+    navTransit: "Transit & Emergency",
+    navConverter: "Currency",
+    navSaved: "My Itinerary",
+    
+    heroBadge: "Jeju Island Official Tourist Guide",
+    heroTitle: "Experience the Wonder of Jeju Island",
+    heroSubtitle: "Your ultimate companion for hassle-free travel, Korean phrases, taxi helper, and local highlights.",
+    searchPlaceholder: "Search Seongsan, beaches, black pork, cafes...",
+    
+    filterAll: "✨ All Spots",
+    filterNature: "🌋 UNESCO Nature",
+    filterCulture: "🏯 Culture & Heritage",
+    filterFood: "🍊 Food & Cafes",
+    filterActivity: "🏄 Activities",
+
+    weatherTitle: "Jeju Weather & Packing Tips",
+    weatherTemp: "23°C (Sunny & Breezy)",
+    weatherDesc: "Jeju is famous for strong coastal winds! A light jacket or windbreaker is highly recommended.",
+    weatherTipHeader: "Travel Tip:",
+    weatherTipBody: "Always keep an umbrella & sunglasses ready. Weather can change quickly near Mount Halla.",
+
+    taxiCardBtn: "🚖 Show to Taxi Driver",
+    bookmarkBtn: "⭐ Save Spot",
+    savedLabel: "Saved",
+    viewDetail: "View Details",
+    addressLabel: "Address in Korean:",
+
+    phraseTitle: "Essential Tourist Korean & Audio Pronunciation",
+    phraseSub: "Tap any phrase to listen to native Korean pronunciation powered by Speech Synthesis!",
+    listenAudio: "🔊 Listen Pronunciation",
+
+    transitTitle: "Jeju Transportation & Emergency Hotline",
+    hotlineHeader: "☎️ 1330 Korea Travel Hotline",
+    hotlineDesc: "Free 24/7 travel advice and translation service in English, Chinese, Japanese & Russian.",
+    callNow: "Call 1330 Now",
+    taxiHeader: "🚖 Jeju Taxi Tips",
+    taxiDesc: "Standard taxis take T-Money cards & Credit cards. For airport rides, use Global Taxi service.",
+    busHeader: "🚌 Bus 600 Limousine",
+    busDesc: "Runs every 15-20 min from Jeju Airport to Jungmun Complex & Seogwipo.",
+
+    calcTitle: "Currency & Budget Calculator",
+    calcSub: "Quickly convert Korean Won (KRW) to your home currency.",
+    krwInput: "South Korean Won (KRW)",
+    usdLabel: "US Dollar (USD)",
+    eurLabel: "Euro (EUR)",
+    cnyLabel: "Chinese Yuan (CNY)",
+    jpyLabel: "Japanese Yen (JPY)",
+
+    itineraryTitle: "My Saved Jeju Destinations",
+    noSavedItems: "No saved spots yet! Click '⭐ Save Spot' on any attraction to build your itinerary.",
+    printItinerary: "🖨️ Print / Save Plan",
+    clearAll: "Delete All",
+    closeModal: "Close",
+
+    taxiModalTitle: "Show This Screen to Your Taxi Driver!",
+    taxiModalInstruction: "Please tap the address to enlarge or read aloud to the driver.",
+    takeMeTo: "기사님, 여기로 가주세요:",
+    thankYou: "감사합니다! (Thank you!)"
+  },
+
+  ko: {
+    navTitle: "디스커버 제주",
+    navSub: "외국인 여행 길잡이",
+    navExplore: "명소 탐색",
+    navPhrase: "필수 회화 & 발음",
+    navTransit: "교통 & 긴급 안내",
+    navConverter: "환율 계산",
+    navSaved: "내 여행 일정",
+    
+    heroBadge: "제주도 공식 종합 관광 안내",
+    heroTitle: "신비로운 제주도를 경험하세요",
+    heroSubtitle: "외국인 관광객을 위한 스마트 여행 길잡이. 택시 주소 카드, 서바이벌 한국어 발음, 실시간 안내.",
+    searchPlaceholder: "성산일출봉, 협재해수욕장, 흑돼지, 카페 검색...",
+    
+    filterAll: "✨ 전체 명소",
+    filterNature: "🌋 유네스코 자연",
+    filterCulture: "🏯 문화 & 유산",
+    filterFood: "🍊 맛집 & 카페",
+    filterActivity: "🏄 액티비티",
+
+    weatherTitle: "제주 실시간 날씨 & 체감 복장 팁",
+    weatherTemp: "23°C (맑음, 바람 보통)",
+    weatherDesc: "제주는 해안 바람이 불기 때문에 얇은 바람막이 점퍼나 외투를 휴대하는 것이 좋습니다.",
+    weatherTipHeader: "여행 꿀팁:",
+    weatherTipBody: "한라산 근처는 날씨 변화가 가파르니 접이식 우산과 선글라스를 챙기세요.",
+
+    taxiCardBtn: "🚖 택시 기사님용 화면",
+    bookmarkBtn: "⭐ 일정에 추가",
+    savedLabel: "저장됨",
+    viewDetail: "상세보기",
+    addressLabel: "한글 주소:",
+
+    phraseTitle: "여행객 필수 한국어 & 음성 발음듣기",
+    phraseSub: "카드를 누르면 오디오(TTS)로 정확한 한국어 발음을 바로 들을 수 있습니다!",
+    listenAudio: "🔊 음성 발음 듣기",
+
+    transitTitle: "제주 대중교통 & 긴급 관광 안내",
+    hotlineHeader: "☎️ 1330 관광통역안내전화",
+    hotlineDesc: "24시간 연중무휴 영어, 중국어, 일본어 무료 통역 및 여행 안내 지원.",
+    callNow: "1330 전화 연결",
+    taxiHeader: "🚖 제주 택시 이용 팁",
+    taxiDesc: "모든 택시에서 신용카드 및 T-Money 결제 가능. 외국어 지정 글로벌 택시도 이용 가능.",
+    busHeader: "🚌 600번 공항 리무진",
+    busDesc: "제주공항에서 중문관광단지 및 서귀포까지 15~20분 간격 운행.",
+
+    calcTitle: "환율 및 여행 예산 계산기",
+    calcSub: "원화(KRW) 금액을 자국 통화로 빠르게 환산해 보세요.",
+    krwInput: "대한민국 원 (KRW)",
+    usdLabel: "미국 달러 (USD)",
+    eurLabel: "유로화 (EUR)",
+    cnyLabel: "중국 위안 (CNY)",
+    jpyLabel: "일본 엔화 (JPY)",
+
+    itineraryTitle: "내가 찜한 제주 여행 일정",
+    noSavedItems: "저장된 명소가 없습니다. 원하는 카드에서 '⭐ 일정에 추가'를 눌러보세요!",
+    printItinerary: "🖨️ 일정 출력 / 저장",
+    clearAll: "전체 삭제",
+    closeModal: "닫기",
+
+    taxiModalTitle: "택시 기사님에게 이 화면을 보여주세요!",
+    taxiModalInstruction: "기사님이 목적지 주소를 한눈에 확인하실 수 있습니다.",
+    takeMeTo: "기사님, 여기로 가주세요:",
+    thankYou: "감사합니다!"
+  },
+
+  zh: {
+    navTitle: "探索济州",
+    navSub: "外国游客旅行 Total Guide",
+    navExplore: "探索景点",
+    navPhrase: "常用韩语 & 发音",
+    navTransit: "交通 & 紧急求助",
+    navConverter: "汇率换算",
+    navSaved: "我的行程",
+    
+    heroBadge: "济州岛官方旅游指南",
+    heroTitle: "体验济州岛的无限魅力",
+    heroSubtitle: "专为外国游客打造的随身助手：出租车地址显示卡、常用韩语真人发音、精选景点指南。",
+    searchPlaceholder: "搜索城山日出峰、海滩、黑猪肉、咖啡馆...",
+    
+    filterAll: "✨ 全部景点",
+    filterNature: "🌋 世界自然遗产",
+    filterCulture: "🏯 文化 & 历史",
+    filterFood: "🍊 美食 & 咖啡",
+    filterActivity: "🏄 休闲体验",
+
+    weatherTitle: "济州天气与穿衣建议",
+    weatherTemp: "23°C (晴朗/微风)",
+    weatherDesc: "济州海风较强，建议携带薄外套或防风衣。",
+    weatherTipHeader: "旅游小贴士:",
+    weatherTipBody: "山下和山上天气多变，请随身携带折叠伞与太阳镜。",
+
+    taxiCardBtn: "🚖 给出租车司机看",
+    bookmarkBtn: "⭐ 收藏景点",
+    savedLabel: "已收藏",
+    viewDetail: "查看详情",
+    addressLabel: "韩文地址:",
+
+    phraseTitle: "旅游必备韩语 & 语音发音",
+    phraseSub: "点击任意短语即可播放标准韩语发音！",
+    listenAudio: "🔊 播放韩语发音",
+
+    transitTitle: "济州交通 & 旅游求助热线",
+    hotlineHeader: "☎️ 1330 韩国旅游热线",
+    hotlineDesc: "提供24小时中文、英文、日文免费翻译及旅游咨询服务。",
+    callNow: "拨打 1330",
+    taxiHeader: "🚖 济州出租车指南",
+    taxiDesc: "均支持信用卡及交通卡支付。机场提供国际出租车服务。",
+    busHeader: "🚌 600路机场巴士",
+    busDesc: "从济州机场直达中文观光区及西归浦，每15-20分钟一班。",
+
+    calcTitle: "汇率与预算计算器",
+    calcSub: "快速将韩元 (KRW) 换算为您的常用货币。",
+    krwInput: "韩元 (KRW)",
+    usdLabel: "美元 (USD)",
+    eurLabel: "欧元 (EUR)",
+    cnyLabel: "人民币 (CNY)",
+    jpyLabel: "日元 (JPY)",
+
+    itineraryTitle: "我的济州收藏行程",
+    noSavedItems: "暂无收藏！在感兴趣的景点卡片上点击 '⭐ 收藏景点' 即可生成行程。",
+    printItinerary: "🖨️ 打印 / 保存行程",
+    clearAll: "清空行程",
+    closeModal: "关闭",
+
+    taxiModalTitle: "请将此页面出示给出租车司机！",
+    taxiModalInstruction: "大字显示韩文目的地地址，方便司机确认。",
+    takeMeTo: "司机师傅，请带我去这里：",
+    thankYou: "谢谢！(Thank you!)"
+  },
+
+  ja: {
+    navTitle: "ディスカバー済州",
+    navSub: "外国人観光客のためのトラベルガイド",
+    navExplore: "スポット検索",
+    navPhrase: "必修韓国語 & 音声",
+    navTransit: "交通 & 急診ガイド",
+    navConverter: "為替計算",
+    navSaved: "マイ日程",
+    
+    heroBadge: "済州島 公式観光ガイド",
+    heroTitle: "神秘の島・済州島を体験しよう",
+    heroSubtitle: "タクシー用韓国語カード、韓国語音声ガイド、おすすめスポット満載の観光アプリ。",
+    searchPlaceholder: "城山日出峰、ビーチ、黒豚、カフェを検索...",
+    
+    filterAll: "✨ すべて",
+    filterNature: "🌋 ユネスコ自然遺産",
+    filterCulture: "🏯 文化 & 歴史",
+    filterFood: "🍊 グルメ & カフェ",
+    filterActivity: "🏄 アクティビティ",
+
+    weatherTitle: "済州島の天気 & 服装アドバイス",
+    weatherTemp: "23°C (晴れ・風あり)",
+    weatherDesc: "済州島は風が強いため、薄手のウィンドブレイカー持参がおすすめです。",
+    weatherTipHeader: "旅のヒント:",
+    weatherTipBody: "漢拏山周辺は天気が変わりやすいため、折りたたみ傘をお持ちください。",
+
+    taxiCardBtn: "🚖 タクシー運転手に見せる",
+    bookmarkBtn: "⭐ 日程に追加",
+    savedLabel: "保存済み",
+    viewDetail: "詳細を見る",
+    addressLabel: "韓国語住所:",
+
+    phraseTitle: "旅의 必修韓国語 & 音声ガイド",
+    phraseSub: "タップするとWeb voiceでネイティブ韓国語の発音が再生されます！",
+    listenAudio: "🔊 音声を聴く",
+
+    transitTitle: "済州の交通 & 緊急案内",
+    hotlineHeader: "☎️ 1330 韓国観光通報ホットライン",
+    hotlineDesc: "24時間対応、日本語・英語・中国語で無料通訳および観光案内が受けられます。",
+    callNow: "1330に電話する",
+    taxiHeader: "🚖 タクシー利用のコツ",
+    taxiDesc: "クレジットカード・T-Money利用可能。空港ではグローバルタクシーも手配可能。",
+    busHeader: "🚌 600番 空港リムジンバス",
+    busDesc: "済州空港から中文観光団地・西帰浦まで15〜20分間隔で運行。",
+
+    calcTitle: "為替 & 予算計算ツール",
+    calcSub: "韓国ウォン (KRW) をご希望の通貨へ瞬時に換算します。",
+    krwInput: "韓国ウォン (KRW)",
+    usdLabel: "米ドル (USD)",
+    eurLabel: "ユーロ (EUR)",
+    cnyLabel: "中国元 (CNY)",
+    jpyLabel: "日本円 (JPY)",
+
+    itineraryTitle: "保存した済州旅プラン",
+    noSavedItems: "まだ保存されたスポットがありません。カードの '⭐ 日程に追加' を押してください！",
+    printItinerary: "🖨️ 印刷 / 保存",
+    clearAll: "全削除",
+    closeModal: "閉じる",
+
+    taxiModalTitle: "タクシーの運転手さんにこの画面を見せてください！",
+    taxiModalInstruction: "目的地と住所が大きな韓国語で表示されます。",
+    takeMeTo: "運転手さん、ここまでお願いします：",
+    thankYou: "ありがとうございます！"
+  }
+};
