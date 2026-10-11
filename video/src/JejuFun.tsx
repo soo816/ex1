@@ -1,5 +1,6 @@
 import {
   AbsoluteFill,
+  Audio,
   Img,
   interpolate,
   random,
@@ -474,11 +475,49 @@ const Outro: React.FC = () => {
   );
 };
 
+// ---------- 사운드 ----------
+
+const Sfx: React.FC<{ at: number; src: string; volume?: number }> = ({ at, src, volume = 0.8 }) => (
+  <Sequence from={at} durationInFrames={s(2)} layout="none">
+    <Audio src={staticFile(`audio/${src}.wav`)} volume={volume} />
+  </Sequence>
+);
+
+const Soundtrack: React.FC = () => {
+  const { hero, beach, food, tangerine, outro } = SCENES;
+  return (
+    <>
+      <Audio
+        src={staticFile("audio/bgm.wav")}
+        volume={(f) => interpolate(f, [0, 10, TOTAL_FRAMES - 20, TOTAL_FRAMES], [0, 0.42, 0.42, 0], { extrapolateRight: "clamp" })}
+      />
+      {/* 인트로: 떨어져서 착지, 제목 팝 */}
+      <Sfx at={16} src="boing" />
+      <Sfx at={20} src="pop" volume={0.5} />
+      <Sfx at={28} src="pop" volume={0.5} />
+      {/* 장면마다 STEP 제목 팝 */}
+      {[hero, beach, food, tangerine].map((sc, i) => (
+        <Sfx key={i} at={sc.from + 5} src="pop" volume={0.4} />
+      ))}
+      <Sfx at={hero.from + 45} src="pop" />
+      <Sfx at={beach.from + 8} src="whoosh" volume={0.9} />
+      {[25, 40, 55, 70, 85].map((f) => (
+        <Sfx key={f} at={food.from + f} src="chomp" volume={0.6} />
+      ))}
+      <Sfx at={food.from + 100} src="levelup" />
+      <Sfx at={tangerine.from + 50} src="shock" volume={0.55} />
+      <Sfx at={tangerine.from + 55} src="pop" />
+      <Sfx at={outro.from + 2} src="sparkle" volume={0.7} />
+    </>
+  );
+};
+
 // ---------- 전체 ----------
 
 export const JejuFun: React.FC = () => {
   return (
     <AbsoluteFill style={{ backgroundColor: "#000" }}>
+      <Soundtrack />
       <Sequence from={SCENES.intro.from} durationInFrames={SCENES.intro.dur}>
         <Intro />
       </Sequence>
