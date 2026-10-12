@@ -4,7 +4,7 @@ Discover Jeju 사이트 사진(`../assets`)으로 만든 28초 세로형(1080x19
 
 - 미리보기: `npm install && npm run studio`
 - 렌더링: `npm run render` → `out/jeju-fun.mp4`
-- 완성본: `jeju-fun.mp4` (여성 리포터 나레이션), `jeju-fun-male.mp4` (남성 가이드 나레이션)
+- 완성본: `jeju-fun.mp4` (여성 리포터 나레이션), `jeju-fun-male.mp4` (남성 아이돌 팬 토크 느낌 나레이션)
 - 남성 버전 렌더링: `npx remotion render JejuFunBoy out/jeju-fun-male.mp4`
 
 장면: 인트로 → 제주 도착 → 바다 → 먹방 게이지 → 감귤밭 → 아웃트로
@@ -30,9 +30,13 @@ http://creativecommons.org/licenses/by/4.0/
 | 컴포지션 | 대본 | 목소리 | 결과 |
 |---|---|---|---|
 | `JejuFun` | `narration/script.json` (리포터 말투) | Supertonic `F4` 밝은 여성 | `public/narration/`, `src/narration-manifest.json` |
-| `JejuFunBoy` | `narration/script-male.json` (친근한 해요체 가이드) | Supertonic `M1` 젊고 밝은 남성 | `public/narration-male/`, `src/narration-manifest-male.json` |
+| `JejuFunBoy` | `narration/script-male.json` (밝고 장난스러운 아이돌 팬 토크 해요체) | Supertonic **3** `M1` 밝고 부드러운 20대 초반 남성 | `public/narration-male/`, `src/narration-manifest-male.json` |
 
 다시 만들기: `python3 scripts/narrate.py` (여성), `python3 scripts/narrate.py --script narration/script-male.json` (남성).
-목소리는 대본 파일의 `supertonic.voice`(F1~F5, M1~M5)로 고르고, 한 번만 바꿔 보려면 `--voice M4`처럼 붙이면 됩니다.
+목소리는 대본 파일의 `supertonic.model`(`supertonic-2`/`supertonic-3`)과 `supertonic.voice`(F1~F5, M1~M5)로 고르고, 한 번만 바꿔 보려면 `--voice M4`처럼 붙이면 됩니다. 내장 목소리를 섞을 수도 있어요: `"voice": {"M1": 0.7, "F3": 0.3}`.
+`voice-compare.mp3`: 남성 후보 목소리 비교(같은 문장, 0.5초 간격) — ① Supertonic 3 `M1`(채택) ② `M1` 70% + `F3` 30% ③ `M1` 70% + `F5` 30%.
+
+> 실존 인물(연예인·아이돌 등)의 목소리를 복제하거나 흉내 내지 않습니다. 참조 음성 없이 오픈 모델의 내장 목소리만 씁니다.
+> Supertonic 2·3 모델: OpenRAIL-M(상업적 사용 가능, 사용 제한 조항 준수), 코드: MIT.
 
 자세한 사용법은 `.claude/skills/video-narration/SKILL.md`.

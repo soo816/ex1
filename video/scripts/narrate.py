@@ -66,10 +66,17 @@ def finish(raw, path):
 
 def synth_supertonic(lines, cfg, raw_paths):
     import numpy as np
-    from supertonic import TTS
+    from supertonic import TTS, Style
 
     tts = TTS(model=cfg.get("model", "supertonic-2"))
-    style = tts.get_voice_style(cfg["voice"])
+    voice = cfg["voice"]
+    if isinstance(voice, dict):
+        # 내장 목소리 섞기, 예: {"M1": 0.7, "F5": 0.3} (가중치 합 1)
+        styles = {name: tts.get_voice_style(name) for name in voice}
+        style = Style(sum(w * styles[n].ttl for n, w in voice.items()),
+                      sum(w * styles[n].dp for n, w in voice.items()))
+    else:
+        style = tts.get_voice_style(voice)
     for i, (line, raw) in enumerate(zip(lines, raw_paths)):
         np.random.seed(cfg.get("seed", 0) + i)  # 같은 대본이면 매번 같은 음성
         speed = line.get("speed", cfg.get("speed", 1.05))
@@ -131,7 +138,10 @@ def main():
             out.append({**entry, "file": f"{out_name}/{line['id']}.mp3", "duration": round(dur, 3)})
             print(f"{line['id']:>10}  {dur:4.2f}s  {line['text']}")
 
-    voice = f"{engine}:{cfg['voice']}"
+    voice_name = cfg["voice"]
+    if isinstance(voice_name, dict):
+        voice_name = "+".join(f"{n}*{w}" for n, w in voice_name.items())
+    voice = f"{engine}:{voice_name}"
     with open(manifest, "w", encoding="utf-8") as f:
         json.dump({"voice": voice, "lines": out}, f, ensure_ascii=False, indent=2)
         f.write("\n")

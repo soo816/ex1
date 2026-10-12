@@ -21,7 +21,7 @@ description: Remotion 영상(video/)에 자연스러운 한국어 나레이션(�
 | 컴포지션 | 대본 | 목소리 |
 |---|---|---|
 | `JejuFun` | `narration/script.json` — 리포터 말투 | supertonic `F4` (밝은 여성) |
-| `JejuFunBoy` | `narration/script-male.json` — 친근하고 귀여운 해요체 가이드 | supertonic `M1` (젊고 밝은 남성) |
+| `JejuFunBoy` | `narration/script-male.json` — 밝고 장난스러운 아이돌 팬 토크 해요체 | `supertonic-3` `M1` (밝고 부드러운 20대 초반 남성) |
 
 새 버전을 만들 때: 대본 복사 → `out`/`manifest`/`voice`/문장 수정 → `python3 scripts/narrate.py --script <대본>` → Root.tsx에 컴포지션 추가.
 
@@ -46,7 +46,8 @@ description: Remotion 영상(video/)에 자연스러운 한국어 나레이션(�
 | 엔진 | voice | 느낌 |
 |---|---|---|
 | supertonic | `F4` (기본) | 밝은 여성 리포터 |
-| supertonic | `M1` | 젊고 밝은 남성 가이드 (남성 중 가장 높고 생기 있는 음높이, 중간값 약 150Hz) |
+| supertonic-3 | `M1` | 밝고 부드러운 20대 초반 남성, 아이돌 팬 토크 느낌 (대본 전체 f0 중간값 약 167Hz, 106~225Hz로 넓고 생기 있음) |
+| supertonic-2 | `M1` | 젊은 남성 가이드 (약 150Hz, 억양 폭이 좁은 편) |
 | supertonic | `M4` | 조금 차분한 젊은 남성 (약 130Hz) |
 | supertonic | `M2`, `M3`, `M5` | 낮고 묵직한 남성 (약 100~110Hz) |
 | supertonic | `F1`~`F5` | 여성 목소리 (`F2`가 가장 높음) |
@@ -54,6 +55,13 @@ description: Remotion 영상(video/)에 자연스러운 한국어 나레이션(�
 | edge | `ko-KR-InJoonNeural` | 차분한 남성 나레이터 |
 
 목소리 고르기: 같은 문장을 후보 목소리로 만들어 음높이(f0 중간값·범위가 높고 넓을수록 젊고 밝게 들림)와 Whisper 받아쓰기 정확도를 비교한다. `python3 scripts/narrate.py --voice M2`처럼 바꿔서 만들 수 있다. edge는 `--engine edge --voice ko-KR-InJoonNeural --rate +15%`.
+
+### 목소리 고르기 기준과 주의
+- 실존 인물(연예인·아이돌 등)의 목소리를 복제하거나 흉내 내지 않는다. 참조 음성(voice cloning)을 쓰지 말고, 오픈 모델의 **내장 목소리**만 쓴다. "아이돌 같은 느낌"은 말투(대본)와 내장 목소리 선택으로만 낸다.
+- 모델은 `script.json`의 `supertonic.model`로 고른다. `supertonic-3`은 `supertonic-2`보다 억양 폭이 넓고 발음이 또렷했다.
+- 내장 목소리 섞기: `"voice": {"M1": 0.7, "F3": 0.3}` (가중치 합 1). 남성 목소리에 여성 목소리를 30% 정도 섞으면 음색이 부드러워진다. 40% 이상이면 f0가 190Hz를 넘어 남성으로 들리지 않을 수 있다.
+- 비교: 후보마다 같은 대본 전체를 만들어 f0(중간값·p10~p90), Whisper 받아쓰기 오류율, 장면 길이 초과를 본다. 남성 젊은 목소리는 f0 중간값 140~180Hz가 기준.
+- 시험해 보고 뺀 엔진: CosyVoice 300M SFT/Instruct(Apache-2.0)는 한국어 발음이 거의 알아들을 수 없었고, MeloTTS-Korean(MIT)은 여성 화자(`KR`) 하나뿐이다.
 
 ## 배경음악 바꾸기
 실제 악기로 녹음된 음원을 `video/public/audio/`에 넣고 `src/JejuFun.tsx`의 `BGM_FILE` 경로만 바꾼다. 음원은 28초로 자르고 -14 LUFS로 맞춘 뒤 넣으면 `BGM_VOLUME`/`BGM_DUCKED`를 그대로 쓸 수 있다. 저작권 표기가 필요한 음원(CC BY 등)이면 `video/README.md`에 출처를 적는다.

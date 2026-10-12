@@ -1,18 +1,18 @@
 {
   "engine": "supertonic",
   "supertonic": {
-    "model": "supertonic-2",
+    "model": "supertonic-3",
     "voice": "M1",
-    "speed": 1.1,
+    "speed": 1.05,
     "steps": 16,
-    "seed": 3
+    "seed": 0
   },
   "edge": {
     "voice": "ko-KR-InJoonNeural",
     "rate": "+8%",
     "pitch": "+0Hz"
   },
-  "_about": "남성 나레이터 버전(친근하고 귀여운 해요체 가이드). JejuFunBoy 컴포지션에서 쓴다.",
+  "_about": "남성 나레이터 버전(밝고 부드러운 20대 초반 아이돌 팬 토크 느낌의 해요체). 실존 인물 목소리를 흉내 내거나 복제하지 않고, 오픈 모델의 내장 목소리만 쓴다. JejuFunBoy 컴포지션에서 쓴다.",
   "out": "narration-male",
   "manifest": "src/narration-manifest-male.json",
   "lines": [
@@ -20,37 +20,37 @@
       "id": "intro",
       "scene": "intro",
       "offset": 0.4,
-      "text": "자, 귤이랑 제주 대모험 출발해요!"
+      "text": "여러분~ 귤이랑 제주 가볼까요?"
     },
     {
       "id": "hero",
       "scene": "hero",
       "offset": 0.4,
-      "text": "여기는 제주예요! 커다란 분화구가 귤이를 반겨줘요."
+      "text": "와, 여기가 제주예요! 분화구가 진짜 크죠?"
     },
     {
       "id": "beach",
       "scene": "beach",
       "offset": 0.4,
-      "text": "에메랄드빛 바다! 귤이는 서핑도 정말 잘해요."
+      "text": "바다 색 좀 보세요! 귤이 서핑 완전 잘하죠?"
     },
     {
       "id": "food",
       "scene": "food",
       "offset": 0.4,
-      "text": "제주 흑돼지 앞에서, 배부름 게이지가 꽉 찼어요!"
+      "text": "흑돼지 냄새… 배부름 게이지 벌써 꽉 찼어요!"
     },
     {
       "id": "tangerine",
       "scene": "tangerine",
       "offset": 0.4,
-      "text": "그런데 감귤밭에서, 뜻밖의 친척을 만났대요!"
+      "text": "어? 감귤밭에서 친척들을 만났대요!"
     },
     {
       "id": "outro",
       "scene": "outro",
       "offset": 0.5,
-      "text": "여러분도 제주에서, 귤이를 만나 보세요!"
+      "text": "여러분도 제주에서 귤이 만나러 와요~!"
     }
   ]
 }
