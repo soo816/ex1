@@ -12,6 +12,7 @@ import {
 } from "remotion";
 import { loadFont } from "@remotion/fonts";
 import { Gyuli } from "./Gyuli";
+import narrationManifest from "./narration-manifest.json";
 
 const fontFamily = "Jua";
 loadFont({ family: fontFamily, url: staticFile("Jua-Regular.ttf") });
@@ -483,14 +484,104 @@ const Sfx: React.FC<{ at: number; src: string; volume?: number }> = ({ at, src, 
   </Sequence>
 );
 
+// 배경음악 파일. 실제 악기 음원(mp3 등)을 public/audio/ 에 넣고 이 경로만 바꾸면 된다.
+const BGM_FILE = "audio/bgm.wav";
+const BGM_VOLUME = 0.36;
+const BGM_DUCKED = 0.12; // 나레이션이 나오는 동안 배경음악을 줄인다
+
+type NarrationLine = {
+  id: string;
+  scene: keyof typeof SCENES;
+  offset: number;
+  text: string;
+  file: string;
+  duration: number;
+};
+
+// scripts/narrate.py 가 만든 나레이션 목록 (없으면 나레이션 없이 렌더링)
+const NARRATION = (narrationManifest.lines as NarrationLine[]).map((line) => {
+  const from = SCENES[line.scene].from + s(line.offset);
+  return { ...line, from, to: from + Math.ceil(line.duration * FPS) };
+});
+
+const bgmVolume = (f: number) => {
+  const fade = interpolate(f, [0, 10, TOTAL_FRAMES - 20, TOTAL_FRAMES], [0, 1, 1, 0], {
+    extrapolateRight: "clamp",
+  });
+  // 나레이션 앞뒤로 0.2초에 걸쳐 부드럽게 줄였다가 다시 키운다
+  const duck = NARRATION.reduce((v, n) => {
+    const d = interpolate(f, [n.from - 6, n.from, n.to, n.to + 8], [0, 1, 1, 0], {
+      extrapolateLeft: "clamp",
+      extrapolateRight: "clamp",
+    });
+    return Math.max(v, d);
+  }, 0);
+  return fade * (BGM_VOLUME - (BGM_VOLUME - BGM_DUCKED) * duck);
+};
+
+const Narration: React.FC = () => (
+  <>
+    {NARRATION.map((n) => (
+      <Sequence key={n.id} from={n.from} durationInFrames={n.to - n.from + 10} layout="none">
+        <Audio src={staticFile(n.file)} />
+      </Sequence>
+    ))}
+  </>
+);
+
+const Subtitle: React.FC<{ text: string; dur: number }> = ({ text, dur }) => {
+  const frame = useCurrentFrame();
+  const opacity = interpolate(frame, [0, 5, dur - 5, dur], [0, 1, 1, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  return (
+    <div
+      style={{
+        position: "absolute",
+        bottom: 70,
+        left: 60,
+        right: 60,
+        display: "flex",
+        justifyContent: "center",
+        opacity,
+      }}
+    >
+      <div
+        style={{
+          background: "rgba(0,0,0,0.6)",
+          color: "#fff",
+          fontFamily,
+          fontSize: 50,
+          lineHeight: 1.35,
+          padding: "16px 34px",
+          borderRadius: 24,
+          textAlign: "center",
+          wordBreak: "keep-all",
+        }}
+      >
+        {text}
+      </div>
+    </div>
+  );
+};
+
+const Subtitles: React.FC = () => (
+  <>
+    {NARRATION.map((n) => (
+      <Sequence key={n.id} from={n.from} durationInFrames={n.to - n.from + 6}>
+        <Subtitle text={n.text} dur={n.to - n.from + 6} />
+      </Sequence>
+    ))}
+  </>
+);
+
 const Soundtrack: React.FC = () => {
   const { hero, beach, food, tangerine, outro } = SCENES;
   return (
     <>
-      <Audio
-        src={staticFile("audio/bgm.wav")}
-        volume={(f) => interpolate(f, [0, 10, TOTAL_FRAMES - 20, TOTAL_FRAMES], [0, 0.36, 0.36, 0], { extrapolateRight: "clamp" })}
-      />
+      <Audio src={staticFile(BGM_FILE)} volume={bgmVolume} />
+      <Narration />
       {/* 인트로: 떨어져서 착지, 제목 팝 */}
       <Sfx at={16} src="boing" />
       <Sfx at={20} src="pop" volume={0.5} />
@@ -536,6 +627,7 @@ export const JejuFun: React.FC = () => {
       <Sequence from={SCENES.outro.from} durationInFrames={SCENES.outro.dur}>
         <Outro />
       </Sequence>
+      <Subtitles />
     </AbsoluteFill>
   );
 };

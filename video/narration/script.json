@@ -1,0 +1,14 @@
+{
+  "voice": "ko-KR-SunHiNeural",
+  "rate": "+8%",
+  "pitch": "+0Hz",
+  "_voices": "여성 리포터: ko-KR-SunHiNeural / 남성 나레이터: ko-KR-InJoonNeural, ko-KR-HyunsuMultilingualNeural",
+  "lines": [
+    { "id": "intro", "scene": "intro", "offset": 0.4, "text": "귤이의 제주 대모험! 지금 바로 출발합니다." },
+    { "id": "hero", "scene": "hero", "offset": 0.4, "text": "여기는 제주입니다. 거대한 분화구가 귤이를 반겨주는데요." },
+    { "id": "beach", "scene": "beach", "offset": 0.4, "text": "에메랄드빛 바다! 귤이, 서핑 실력도 수준급입니다." },
+    { "id": "food", "scene": "food", "offset": 0.4, "text": "제주 흑돼지 앞에서, 배부름 게이지가 순식간에 최대치!" },
+    { "id": "tangerine", "scene": "tangerine", "offset": 0.4, "text": "그런데 감귤밭에서… 뜻밖의 친척들을 만났다고요?" },
+    { "id": "outro", "scene": "outro", "offset": 0.5, "text": "여러분도 제주에서, 귤이를 만나보세요!" }
+  ]
+}
