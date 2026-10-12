@@ -14,8 +14,18 @@ Discover Jeju 사이트 사진(`../assets`)으로 만든 28초 세로형(1080x19
 - 배경음악: 실제 악기(우쿨렐레)로 녹음된 Kevin MacLeod의 "Carefree"를 28초로 자르고 마지막 1초를 페이드아웃했어요(`public/audio/bgm.mp3`, -14 LUFS). 더 이상 직접 합성한 음악이 아닙니다.
 - 효과음: 휘익(서핑)과 작은 뽁(제목) 두 가지만 낮은 음량으로 씁니다. `scripts/make_audio.py`로 직접 합성한 오리지널 → `public/audio/pop.wav`, `whoosh.wav`
 
+## 카드뉴스 쇼츠 (`CardShort`)
+`webapp/`(카드뉴스·대본 → 세로 쇼츠 웹앱)이 렌더링하는 일반 컴포지션입니다. 템플릿 3종(강의·교육 / 정보·뉴스 / 가게·상품), 카드 이미지·사진·글자 카드 장면, 자막, 배경음악 덕킹, 마무리 화면을 지원하고 길이는 나레이션에 맞춰 자동으로 정해져요(`calculateMetadata`).
+미리보기: `npm run studio` → CardShort. 긴 영상용 배경음악은 `public/audio/carefree-long.mp3`, `calm-long.mp3`(200초, -14 LUFS).
+
+글꼴: Jua (SIL OFL), Pretendard (SIL OFL, `public/fonts/Pretendard-LICENSE.txt`)
+
 ### 음원 출처 (CC BY 4.0)
 "Carefree" Kevin MacLeod (incompetech.com)
+Licensed under Creative Commons: By Attribution 4.0 License
+http://creativecommons.org/licenses/by/4.0/
+
+"Clean Soul" Kevin MacLeod (incompetech.com) — CardShort 의 '차분한 곡'
 Licensed under Creative Commons: By Attribution 4.0 License
 http://creativecommons.org/licenses/by/4.0/
 

@@ -13,10 +13,10 @@ import {
 import { loadFont } from "@remotion/fonts";
 import { Gyuli } from "./Gyuli";
 
-const fontFamily = "Jua";
+export const fontFamily = "Jua";
 loadFont({ family: fontFamily, url: staticFile("Jua-Regular.ttf") });
 
-const FPS = 30;
+export const FPS = 30;
 const s = (sec: number) => Math.round(sec * FPS);
 
 const SCENES = {
@@ -508,20 +508,25 @@ const toCues = (manifest: NarrationManifest): Cue[] =>
     return { ...line, from, to: from + Math.ceil(line.duration * FPS) };
   });
 
-const bgmVolume = (cues: Cue[]) => (f: number) => {
-  const fade = interpolate(f, [0, 10, TOTAL_FRAMES - 20, TOTAL_FRAMES], [0, 1, 1, 0], {
-    extrapolateRight: "clamp",
-  });
-  // 나레이션 앞뒤로 0.2초에 걸쳐 부드럽게 줄였다가 다시 키운다
-  const duck = cues.reduce((v, n) => {
-    const d = interpolate(f, [n.from - 6, n.from, n.to, n.to + 8], [0, 1, 1, 0], {
-      extrapolateLeft: "clamp",
+// 배경음악 음량: 앞뒤 페이드 + 나레이션 구간 덕킹 (CardShort 도 같이 쓴다)
+export const duckedBgmVolume =
+  (cues: { from: number; to: number }[], total: number) =>
+  (f: number) => {
+    const fade = interpolate(f, [0, 10, total - 20, total], [0, 1, 1, 0], {
       extrapolateRight: "clamp",
     });
-    return Math.max(v, d);
-  }, 0);
-  return fade * (BGM_VOLUME - (BGM_VOLUME - BGM_DUCKED) * duck);
-};
+    // 나레이션 앞뒤로 0.2초에 걸쳐 부드럽게 줄였다가 다시 키운다
+    const duck = cues.reduce((v, n) => {
+      const d = interpolate(f, [n.from - 6, n.from, n.to, n.to + 8], [0, 1, 1, 0], {
+        extrapolateLeft: "clamp",
+        extrapolateRight: "clamp",
+      });
+      return Math.max(v, d);
+    }, 0);
+    return fade * (BGM_VOLUME - (BGM_VOLUME - BGM_DUCKED) * duck);
+  };
+
+const bgmVolume = (cues: Cue[]) => duckedBgmVolume(cues, TOTAL_FRAMES);
 
 const Narration: React.FC<{ cues: Cue[] }> = ({ cues }) => (
   <>
