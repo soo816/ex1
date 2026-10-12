@@ -15,6 +15,9 @@ description: Remotion 영상(video/)에 자연스러운 한국어 나레이션(�
 
 로봇 같은 대체 음성(espeak, pyttsx3 등)으로 몰래 바꾸지 않는다. 자연스러운 엔진이 하나도 안 되면 나레이션을 빼고 사용자에게 알린다.
 
+## 웹앱 (카드뉴스·대본 → 세로 쇼츠)
+사용자가 직접 영상을 만들고 싶어 하면 `webapp/`을 안내한다 (`cd webapp && npm install && pip install supertonic && npm start` → http://localhost:3000). 같은 TTS 설정(여성 리포터 = supertonic-2 F4 1.1, 남성 = supertonic-3 M1 1.05)을 `webapp/server/tts.py`가 `scripts/narrate.py` 함수로 쓰고, 영상은 `video/src/CardShort.tsx`로 렌더링한다. 자세한 내용은 `webapp/README.md`.
+
 ## 나레이션 버전
 영상 하나에 나레이션 버전을 여러 개 둘 수 있다. 대본마다 `out`(public/ 아래 mp3 폴더)과 `manifest`를 따로 적고, `src/Root.tsx`에 같은 `JejuFun` 컴포넌트를 `defaultProps={{ narration: <manifest> }}`로 등록한다.
 
