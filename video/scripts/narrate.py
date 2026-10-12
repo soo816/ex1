@@ -8,7 +8,10 @@
 
 만든 음성은 앞뒤 무음을 자르고 같은 음량(LOUDNESS_LUFS)으로 맞춘다.
 
-사용법: python3 scripts/narrate.py [--engine supertonic|edge] [--voice F4 | ko-KR-SunHiNeural] [--speed 1.2] [--rate +8%]
+사용법: python3 scripts/narrate.py [--script narration/script-male.json] [--engine supertonic|edge]
+        [--voice F4 | ko-KR-SunHiNeural] [--speed 1.2] [--rate +8%] [--out narration-male] [--manifest src/narration-manifest-male.json]
+
+출력 위치는 대본의 "out"(public/ 아래 폴더)과 "manifest" 값을 따르고, 없으면 public/narration/, src/narration-manifest.json.
 """
 import argparse
 import asyncio
@@ -19,9 +22,9 @@ import subprocess
 import tempfile
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
-SCRIPT = os.path.join(ROOT, "narration", "script.json")
-OUT_DIR = os.path.join(ROOT, "public", "narration")
-MANIFEST = os.path.join(ROOT, "src", "narration-manifest.json")
+DEFAULT_SCRIPT = os.path.join(ROOT, "narration", "script.json")
+DEFAULT_OUT = "narration"  # public/ 아래 폴더
+DEFAULT_MANIFEST = os.path.join("src", "narration-manifest.json")
 
 LOUDNESS_LUFS = -14.0  # 쇼츠 기준 음량. 배경음악은 나레이션 동안 약 -27 LUFS로 줄어든다
 
@@ -90,10 +93,16 @@ def main():
     parser.add_argument("--voice")
     parser.add_argument("--speed", type=float, help="supertonic 말하기 속도 (기본 script.json)")
     parser.add_argument("--rate", help="edge-tts 말하기 속도, 예: +15%%")
+    parser.add_argument("--script", default=DEFAULT_SCRIPT, help="대본 파일")
+    parser.add_argument("--out", help="mp3를 넣을 public/ 아래 폴더 (예: narration-male)")
+    parser.add_argument("--manifest", help="video/ 기준 manifest 경로 (예: src/narration-manifest-male.json)")
     args = parser.parse_args()
 
-    with open(SCRIPT, encoding="utf-8") as f:
+    with open(args.script, encoding="utf-8") as f:
         script = json.load(f)
+    out_name = args.out or script.get("out", DEFAULT_OUT)
+    out_dir = os.path.join(ROOT, "public", out_name)
+    manifest = os.path.join(ROOT, args.manifest or script.get("manifest", DEFAULT_MANIFEST))
     engine = args.engine or script.get("engine", "supertonic")
     cfg = dict(script[engine])
     if args.voice:
@@ -103,7 +112,7 @@ def main():
     if args.rate:
         cfg["rate"] = args.rate
 
-    os.makedirs(OUT_DIR, exist_ok=True)
+    os.makedirs(out_dir, exist_ok=True)
     lines = script["lines"]
     with tempfile.TemporaryDirectory() as tmp:
         ext = "wav" if engine == "supertonic" else "mp3"
@@ -115,18 +124,18 @@ def main():
 
         out = []
         for line, raw in zip(lines, raw_paths):
-            path = os.path.join(OUT_DIR, f"{line['id']}.mp3")
+            path = os.path.join(out_dir, f"{line['id']}.mp3")
             finish(raw, path)
             dur = duration_of(path)
             entry = {k: v for k, v in line.items() if k != "speed"}
-            out.append({**entry, "file": f"narration/{line['id']}.mp3", "duration": round(dur, 3)})
+            out.append({**entry, "file": f"{out_name}/{line['id']}.mp3", "duration": round(dur, 3)})
             print(f"{line['id']:>10}  {dur:4.2f}s  {line['text']}")
 
     voice = f"{engine}:{cfg['voice']}"
-    with open(MANIFEST, "w", encoding="utf-8") as f:
+    with open(manifest, "w", encoding="utf-8") as f:
         json.dump({"voice": voice, "lines": out}, f, ensure_ascii=False, indent=2)
         f.write("\n")
-    print("manifest ->", os.path.abspath(MANIFEST))
+    print("manifest ->", os.path.abspath(manifest))
 
 
 if __name__ == "__main__":

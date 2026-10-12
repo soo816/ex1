@@ -4,7 +4,8 @@ Discover Jeju 사이트 사진(`../assets`)으로 만든 28초 세로형(1080x19
 
 - 미리보기: `npm install && npm run studio`
 - 렌더링: `npm run render` → `out/jeju-fun.mp4`
-- 완성본: `jeju-fun.mp4`
+- 완성본: `jeju-fun.mp4` (여성 리포터 나레이션), `jeju-fun-male.mp4` (남성 가이드 나레이션)
+- 남성 버전 렌더링: `npx remotion render JejuFunBoy out/jeju-fun-male.mp4`
 
 장면: 인트로 → 제주 도착 → 바다 → 먹방 게이지 → 감귤밭 → 아웃트로
 폰트: Jua (SIL OFL)
@@ -24,5 +25,14 @@ http://creativecommons.org/licenses/by/4.0/
 - 기본 엔진: Supertone **Supertonic 2** (`pip install supertonic`), 밝은 여성 목소리 `F4`, 속도 1.1. 컨테이너 안에서 직접 돌아가는 한국어 신경망 TTS로, 처음 한 번만 Hugging Face(`Supertone/supertonic-2`)에서 모델을 받습니다.
   라이선스: 모델은 BigScience OpenRAIL-M(사용 제한 조항을 지키면 상업적 사용 가능), 추론 코드는 MIT.
 - 다른 엔진: `python3 scripts/narrate.py --engine edge` → Microsoft Edge 온라인 음성(`pip install edge-tts`, 기본 `ko-KR-SunHiNeural`). 일반 PC에서는 잘 되지만, Claude 클라우드 세션에서는 Microsoft 서버가 403으로 거부해서 쓸 수 없어요.
+
+### 두 가지 나레이션 버전
+| 컴포지션 | 대본 | 목소리 | 결과 |
+|---|---|---|---|
+| `JejuFun` | `narration/script.json` (리포터 말투) | Supertonic `F4` 밝은 여성 | `public/narration/`, `src/narration-manifest.json` |
+| `JejuFunBoy` | `narration/script-male.json` (친근한 해요체 가이드) | Supertonic `M1` 젊고 밝은 남성 | `public/narration-male/`, `src/narration-manifest-male.json` |
+
+다시 만들기: `python3 scripts/narrate.py` (여성), `python3 scripts/narrate.py --script narration/script-male.json` (남성).
+목소리는 대본 파일의 `supertonic.voice`(F1~F5, M1~M5)로 고르고, 한 번만 바꿔 보려면 `--voice M4`처럼 붙이면 됩니다.
 
 자세한 사용법은 `.claude/skills/video-narration/SKILL.md`.

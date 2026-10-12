@@ -1,0 +1,53 @@
+{
+  "voice": "supertonic:M1",
+  "lines": [
+    {
+      "id": "intro",
+      "scene": "intro",
+      "offset": 0.4,
+      "text": "자, 귤이랑 제주 대모험 출발해요!",
+      "file": "narration-male/intro.mp3",
+      "duration": 2.795
+    },
+    {
+      "id": "hero",
+      "scene": "hero",
+      "offset": 0.4,
+      "text": "여기는 제주예요! 커다란 분화구가 귤이를 반겨줘요.",
+      "file": "narration-male/hero.mp3",
+      "duration": 3.762
+    },
+    {
+      "id": "beach",
+      "scene": "beach",
+      "offset": 0.4,
+      "text": "에메랄드빛 바다! 귤이는 서핑도 정말 잘해요.",
+      "file": "narration-male/beach.mp3",
+      "duration": 3.553
+    },
+    {
+      "id": "food",
+      "scene": "food",
+      "offset": 0.4,
+      "text": "제주 흑돼지 앞에서, 배부름 게이지가 꽉 찼어요!",
+      "file": "narration-male/food.mp3",
+      "duration": 3.474
+    },
+    {
+      "id": "tangerine",
+      "scene": "tangerine",
+      "offset": 0.4,
+      "text": "그런데 감귤밭에서, 뜻밖의 친척을 만났대요!",
+      "file": "narration-male/tangerine.mp3",
+      "duration": 3.396
+    },
+    {
+      "id": "outro",
+      "scene": "outro",
+      "offset": 0.5,
+      "text": "여러분도 제주에서, 귤이를 만나 보세요!",
+      "file": "narration-male/outro.mp3",
+      "duration": 3.004
+    }
+  ]
+}

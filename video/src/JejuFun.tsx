@@ -12,7 +12,6 @@ import {
 } from "remotion";
 import { loadFont } from "@remotion/fonts";
 import { Gyuli } from "./Gyuli";
-import narrationManifest from "./narration-manifest.json";
 
 const fontFamily = "Jua";
 loadFont({ family: fontFamily, url: staticFile("Jua-Regular.ttf") });
@@ -491,25 +490,30 @@ const BGM_DUCKED = 0.22; // 나레이션이 나오는 동안 배경음악을 줄
 
 type NarrationLine = {
   id: string;
-  scene: keyof typeof SCENES;
+  scene: string;
   offset: number;
   text: string;
   file: string;
   duration: number;
 };
 
-// scripts/narrate.py 가 만든 나레이션 목록 (없으면 나레이션 없이 렌더링)
-const NARRATION = (narrationManifest.lines as NarrationLine[]).map((line) => {
-  const from = SCENES[line.scene].from + s(line.offset);
-  return { ...line, from, to: from + Math.ceil(line.duration * FPS) };
-});
+// scripts/narrate.py 가 만든 나레이션 목록 (src/narration-manifest*.json, 비어 있으면 나레이션 없이 렌더링)
+export type NarrationManifest = { voice: string | null; lines: NarrationLine[] };
 
-const bgmVolume = (f: number) => {
+type Cue = NarrationLine & { from: number; to: number };
+
+const toCues = (manifest: NarrationManifest): Cue[] =>
+  manifest.lines.map((line) => {
+    const from = SCENES[line.scene as keyof typeof SCENES].from + s(line.offset);
+    return { ...line, from, to: from + Math.ceil(line.duration * FPS) };
+  });
+
+const bgmVolume = (cues: Cue[]) => (f: number) => {
   const fade = interpolate(f, [0, 10, TOTAL_FRAMES - 20, TOTAL_FRAMES], [0, 1, 1, 0], {
     extrapolateRight: "clamp",
   });
   // 나레이션 앞뒤로 0.2초에 걸쳐 부드럽게 줄였다가 다시 키운다
-  const duck = NARRATION.reduce((v, n) => {
+  const duck = cues.reduce((v, n) => {
     const d = interpolate(f, [n.from - 6, n.from, n.to, n.to + 8], [0, 1, 1, 0], {
       extrapolateLeft: "clamp",
       extrapolateRight: "clamp",
@@ -519,9 +523,9 @@ const bgmVolume = (f: number) => {
   return fade * (BGM_VOLUME - (BGM_VOLUME - BGM_DUCKED) * duck);
 };
 
-const Narration: React.FC = () => (
+const Narration: React.FC<{ cues: Cue[] }> = ({ cues }) => (
   <>
-    {NARRATION.map((n) => (
+    {cues.map((n) => (
       <Sequence key={n.id} from={n.from} durationInFrames={n.to - n.from + 10} layout="none">
         <Audio src={staticFile(n.file)} />
       </Sequence>
@@ -566,9 +570,9 @@ const Subtitle: React.FC<{ text: string; dur: number }> = ({ text, dur }) => {
   );
 };
 
-const Subtitles: React.FC = () => (
+const Subtitles: React.FC<{ cues: Cue[] }> = ({ cues }) => (
   <>
-    {NARRATION.map((n) => (
+    {cues.map((n) => (
       <Sequence key={n.id} from={n.from} durationInFrames={n.to - n.from + 6}>
         <Subtitle text={n.text} dur={n.to - n.from + 6} />
       </Sequence>
@@ -576,12 +580,12 @@ const Subtitles: React.FC = () => (
   </>
 );
 
-const Soundtrack: React.FC = () => {
+const Soundtrack: React.FC<{ cues: Cue[] }> = ({ cues }) => {
   const { hero, beach, food, tangerine } = SCENES;
   return (
     <>
-      <Audio src={staticFile(BGM_FILE)} volume={bgmVolume} />
-      <Narration />
+      <Audio src={staticFile(BGM_FILE)} volume={bgmVolume(cues)} />
+      <Narration cues={cues} />
       {/* 인트로 제목 팝 */}
       <Sfx at={20} src="pop" volume={0.3} />
       <Sfx at={28} src="pop" volume={0.3} />
@@ -598,10 +602,12 @@ const Soundtrack: React.FC = () => {
 
 // ---------- 전체 ----------
 
-export const JejuFun: React.FC = () => {
+// narration: 여성 리포터(JejuFun) / 남성 가이드(JejuFunBoy) 등 나레이션 버전을 고른다 (Root.tsx)
+export const JejuFun: React.FC<{ narration: NarrationManifest }> = ({ narration }) => {
+  const cues = toCues(narration);
   return (
     <AbsoluteFill style={{ backgroundColor: "#000" }}>
-      <Soundtrack />
+      <Soundtrack cues={cues} />
       <Sequence from={SCENES.intro.from} durationInFrames={SCENES.intro.dur}>
         <Intro />
       </Sequence>
@@ -620,7 +626,7 @@ export const JejuFun: React.FC = () => {
       <Sequence from={SCENES.outro.from} durationInFrames={SCENES.outro.dur}>
         <Outro />
       </Sequence>
-      <Subtitles />
+      <Subtitles cues={cues} />
     </AbsoluteFill>
   );
 };

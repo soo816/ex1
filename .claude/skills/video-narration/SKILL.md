@@ -15,15 +15,26 @@ description: Remotion 영상(video/)에 자연스러운 한국어 나레이션(�
 
 로봇 같은 대체 음성(espeak, pyttsx3 등)으로 몰래 바꾸지 않는다. 자연스러운 엔진이 하나도 안 되면 나레이션을 빼고 사용자에게 알린다.
 
+## 나레이션 버전
+영상 하나에 나레이션 버전을 여러 개 둘 수 있다. 대본마다 `out`(public/ 아래 mp3 폴더)과 `manifest`를 따로 적고, `src/Root.tsx`에 같은 `JejuFun` 컴포넌트를 `defaultProps={{ narration: <manifest> }}`로 등록한다.
+
+| 컴포지션 | 대본 | 목소리 |
+|---|---|---|
+| `JejuFun` | `narration/script.json` — 리포터 말투 | supertonic `F4` (밝은 여성) |
+| `JejuFunBoy` | `narration/script-male.json` — 친근하고 귀여운 해요체 가이드 | supertonic `M1` (젊고 밝은 남성) |
+
+새 버전을 만들 때: 대본 복사 → `out`/`manifest`/`voice`/문장 수정 → `python3 scripts/narrate.py --script <대본>` → Root.tsx에 컴포지션 추가.
+
 ## 순서
 1. **대본 쓰기** — `video/narration/script.json`의 `lines`를 고친다.
    - `scene`은 `src/JejuFun.tsx`의 `SCENES` 키(intro 4s, hero 5s, beach 5s, food 5s, tangerine 4.5s, outro 4.5s), `offset`은 장면 시작 후 몇 초 뒤에 말할지.
    - `offset + 길이`가 장면 길이보다 0.5초 이상 짧아야 한다. supertonic 속도 1.1에서 한국어는 초당 약 6~7음절.
    - 리포터 스타일: 현장감 있는 현재형("~입니다", "~인데요?"), 쉼표로 호흡을 끊고, 장면마다 핵심 한 문장.
    - 한 줄만 빠르게 하려면 그 줄에 `"speed": 1.2`를 넣는다. 단, 1.2 이상은 발음이 뭉개질 수 있어 문장을 줄이는 쪽이 낫다.
-2. **음성 만들기** — `cd video && python3 scripts/narrate.py`
+2. **음성 만들기** — `cd video && python3 scripts/narrate.py` (남성 버전은 `--script narration/script-male.json`)
    - 결과: `public/narration/<id>.mp3`(앞뒤 무음 제거, -14 LUFS로 맞춤), `src/narration-manifest.json`(줄마다 길이 포함)
-   - 같은 대본이면 매번 같은 음성이 나온다(`seed`). 마음에 안 들면 `script.json`의 `supertonic.seed`를 바꿔 본다.
+   - 같은 대본이면 매번 같은 음성이 나온다(`seed`). 발음이 뭉개진 줄이 있으면 대본의 `supertonic.seed`를 바꿔 몇 개 만들어 보고 Whisper 받아쓰기가 가장 정확한 것을 고른다.
+   - 문장이 이름("귤이")으로 바로 시작하면 첫 음절이 뭉개지기 쉽다. "자, …"처럼 짧은 말을 앞에 두면 또렷해진다.
    - 길이가 넘치면 문장을 줄이거나 `--speed 1.15`로 다시 만든다.
 3. **알아듣기 쉬운지 확인** — faster-whisper(small, `language="ko"`)로 각 mp3를 받아쓰게 해서 대본과 거의 같은지 본다. ("귤이"를 "규리"로 받아쓰는 건 발음상 정상)
 4. **렌더링** — `npx remotion render JejuFun out/jeju-fun.mp4`
@@ -35,11 +46,14 @@ description: Remotion 영상(video/)에 자연스러운 한국어 나레이션(�
 | 엔진 | voice | 느낌 |
 |---|---|---|
 | supertonic | `F4` (기본) | 밝은 여성 리포터 |
-| supertonic | `F1`~`F5`, `M1`~`M5` | 다른 여성/남성 목소리 |
+| supertonic | `M1` | 젊고 밝은 남성 가이드 (남성 중 가장 높고 생기 있는 음높이, 중간값 약 150Hz) |
+| supertonic | `M4` | 조금 차분한 젊은 남성 (약 130Hz) |
+| supertonic | `M2`, `M3`, `M5` | 낮고 묵직한 남성 (약 100~110Hz) |
+| supertonic | `F1`~`F5` | 여성 목소리 (`F2`가 가장 높음) |
 | edge | `ko-KR-SunHiNeural` | 밝은 여성 리포터 |
 | edge | `ko-KR-InJoonNeural` | 차분한 남성 나레이터 |
 
-`python3 scripts/narrate.py --voice M2`처럼 바꿔서 만들 수 있다. edge는 `--engine edge --voice ko-KR-InJoonNeural --rate +15%`.
+목소리 고르기: 같은 문장을 후보 목소리로 만들어 음높이(f0 중간값·범위가 높고 넓을수록 젊고 밝게 들림)와 Whisper 받아쓰기 정확도를 비교한다. `python3 scripts/narrate.py --voice M2`처럼 바꿔서 만들 수 있다. edge는 `--engine edge --voice ko-KR-InJoonNeural --rate +15%`.
 
 ## 배경음악 바꾸기
 실제 악기로 녹음된 음원을 `video/public/audio/`에 넣고 `src/JejuFun.tsx`의 `BGM_FILE` 경로만 바꾼다. 음원은 28초로 자르고 -14 LUFS로 맞춘 뒤 넣으면 `BGM_VOLUME`/`BGM_DUCKED`를 그대로 쓸 수 있다. 저작권 표기가 필요한 음원(CC BY 등)이면 `video/README.md`에 출처를 적는다.

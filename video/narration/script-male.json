@@ -1,0 +1,56 @@
+{
+  "engine": "supertonic",
+  "supertonic": {
+    "model": "supertonic-2",
+    "voice": "M1",
+    "speed": 1.1,
+    "steps": 16,
+    "seed": 3
+  },
+  "edge": {
+    "voice": "ko-KR-InJoonNeural",
+    "rate": "+8%",
+    "pitch": "+0Hz"
+  },
+  "_about": "남성 나레이터 버전(친근하고 귀여운 해요체 가이드). JejuFunBoy 컴포지션에서 쓴다.",
+  "out": "narration-male",
+  "manifest": "src/narration-manifest-male.json",
+  "lines": [
+    {
+      "id": "intro",
+      "scene": "intro",
+      "offset": 0.4,
+      "text": "자, 귤이랑 제주 대모험 출발해요!"
+    },
+    {
+      "id": "hero",
+      "scene": "hero",
+      "offset": 0.4,
+      "text": "여기는 제주예요! 커다란 분화구가 귤이를 반겨줘요."
+    },
+    {
+      "id": "beach",
+      "scene": "beach",
+      "offset": 0.4,
+      "text": "에메랄드빛 바다! 귤이는 서핑도 정말 잘해요."
+    },
+    {
+      "id": "food",
+      "scene": "food",
+      "offset": 0.4,
+      "text": "제주 흑돼지 앞에서, 배부름 게이지가 꽉 찼어요!"
+    },
+    {
+      "id": "tangerine",
+      "scene": "tangerine",
+      "offset": 0.4,
+      "text": "그런데 감귤밭에서, 뜻밖의 친척을 만났대요!"
+    },
+    {
+      "id": "outro",
+      "scene": "outro",
+      "offset": 0.5,
+      "text": "여러분도 제주에서, 귤이를 만나 보세요!"
+    }
+  ]
+}
