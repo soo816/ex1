@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#1d4ed8" />
+  <title>카드쇼츠 · 카드뉴스로 세로 영상 만들기</title>
+  <link rel="stylesheet" href="app.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">카드쇼츠 <span>카드뉴스·대본 → 세로 쇼츠</span></div>
+    <ol class="steps" id="steps">
+      <li data-step="1"><b>1</b><span>내용 넣기</span></li>
+      <li data-step="2"><b>2</b><span>장면 다듬기</span></li>
+      <li data-step="3"><b>3</b><span>스타일</span></li>
+      <li data-step="4"><b>4</b><span>만들기</span></li>
+    </ol>
+  </header>
+
+  <main>
+    <!-- 1. 내용 넣기 -->
+    <section class="panel" id="step1">
+      <h1>내용 넣기</h1>
+      <p class="lead">카드뉴스 이미지를 올리거나, 대본을 붙여 넣으세요. 둘 다 넣으면 대본 문단이 카드 순서대로 짝지어져요.</p>
+
+      <div class="field">
+        <div class="label">카드뉴스 이미지 <small>카드 한 장 = 장면 하나</small></div>
+        <label class="drop" id="cardDrop">
+          <input type="file" id="cardInput" accept="image/*" multiple hidden />
+          <span class="drop-icon">＋</span>
+          <span>이미지 고르기 <small>(여러 장 한꺼번에 · JPG·PNG·WEBP · 한 장 10MB 이하)</small></span>
+        </label>
+        <ul class="thumbs" id="cardList"></ul>
+      </div>
+
+      <div class="field">
+        <label class="label" for="script">대본 <small>빈 줄로 문단을 나누면 문단 하나가 장면 하나가 돼요</small></label>
+        <textarea id="script" rows="9" placeholder="예)&#10;스마트폰, 아직 어렵게 느껴지시나요?&#10;&#10;메신저로 사진 보내기부터 차근차근 알려드려요.&#10;&#10;지금 바로 신청하세요!"></textarea>
+        <div class="hint" id="scriptHint"></div>
+      </div>
+    </section>
+
+    <!-- 2. 장면 다듬기 -->
+    <section class="panel" id="step2" hidden>
+      <h1>장면 다듬기</h1>
+      <p class="lead">장면마다 화면과 나레이션을 고칠 수 있어요. 나레이션은 80자 안쪽이 듣기 좋아요.</p>
+      <ol class="scenes" id="sceneList"></ol>
+      <button class="btn ghost wide" id="addScene" type="button">＋ 장면 추가</button>
+    </section>
+
+    <!-- 3. 스타일 -->
+    <section class="panel" id="step3" hidden>
+      <h1>스타일</h1>
+
+      <div class="field">
+        <div class="label">템플릿</div>
+        <div class="tiles" id="templates">
+          <label class="tile">
+            <input type="radio" name="template" value="edu" checked />
+            <span class="mock mock-edu"><i></i><em></em></span>
+            <b>강의·교육</b><small>깔끔하고 믿음직한 남색</small>
+          </label>
+          <label class="tile">
+            <input type="radio" name="template" value="news" />
+            <span class="mock mock-news"><i></i><em></em></span>
+            <b>정보·뉴스</b><small>뉴스 자막 바, 리포터 느낌</small>
+          </label>
+          <label class="tile">
+            <input type="radio" name="template" value="shop" />
+            <span class="mock mock-shop"><i></i><em></em></span>
+            <b>가게·상품</b><small>밝고 따뜻하고 발랄하게</small>
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="label">목소리</div>
+        <div class="seg" id="voices">
+          <label><input type="radio" name="voice" value="female_reporter" checked /><span>여성 리포터 <small>추천</small></span></label>
+          <label><input type="radio" name="voice" value="male" /><span>남성</span></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="label">배경음악</div>
+        <div class="seg" id="musics">
+          <label><input type="radio" name="music" value="upbeat" checked /><span>경쾌한 곡</span></label>
+          <label><input type="radio" name="music" value="calm" /><span>차분한 곡</span></label>
+          <label><input type="radio" name="music" value="none" /><span>없음</span></label>
+        </div>
+      </div>
+
+      <label class="switch">
+        <input type="checkbox" id="subtitles" checked />
+        <span class="knob"></span>
+        <span>자막 넣기</span>
+      </label>
+
+      <div class="field">
+        <label class="label" for="title">영상 제목 <small>비워 두면 제목 화면 없이 시작해요</small></label>
+        <input type="text" id="title" maxlength="40" placeholder="예) 시니어 스마트폰 교실" />
+      </div>
+
+      <div class="field">
+        <div class="label">마무리 화면 <small>비워 두면 마무리 화면이 없어요</small></div>
+        <input type="text" id="ctaMain" maxlength="40" placeholder="큰 문구 예) 지금 신청하세요" />
+        <input type="text" id="ctaSub" maxlength="60" placeholder="작은 문구 예) ☎ 02-000-0000 / 홈페이지 주소" />
+      </div>
+    </section>
+
+    <!-- 4. 만들기 -->
+    <section class="panel" id="step4" hidden>
+      <div id="progressView">
+        <h1>영상 만드는 중</h1>
+        <p class="lead">화면을 닫지 말고 잠시 기다려 주세요. 1분짜리 영상은 보통 2~4분 걸려요.</p>
+        <ol class="stages" id="stages">
+          <li data-stage="queued">순서 기다리기</li>
+          <li data-stage="tts">음성 만드는 중</li>
+          <li data-stage="render">영상 만드는 중 <b id="pct"></b></li>
+          <li data-stage="done">완료</li>
+        </ol>
+        <div class="bar"><i id="barFill"></i></div>
+        <p class="hint" id="queueHint"></p>
+      </div>
+      <div id="resultView" hidden>
+        <h1>완성됐어요! 🎉</h1>
+        <video id="player" controls playsinline preload="metadata"></video>
+        <a class="btn primary wide" id="download" download="card-shorts.mp4">⬇ 다운로드</a>
+        <div class="attribution" id="attribution" hidden>
+          <div class="label">배경음악 출처 표기 <small>영상을 올릴 때 설명란에 붙여 넣어 주세요</small></div>
+          <pre id="attributionText"></pre>
+          <button class="btn ghost" id="copyAttribution" type="button">출처 복사</button>
+        </div>
+        <div class="row">
+          <button class="btn ghost" id="editAgain" type="button">수정해서 다시 만들기</button>
+          <button class="btn ghost" id="startOver" type="button">새로 만들기</button>
+        </div>
+      </div>
+      <div id="errorView" hidden>
+        <h1>앗, 문제가 생겼어요</h1>
+        <p class="error-box" id="errorText"></p>
+        <button class="btn primary wide" id="backToEdit" type="button">돌아가서 고치기</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="actions" id="actions">
+    <button class="btn ghost" id="prev" type="button">이전</button>
+    <button class="btn primary" id="next" type="button">다음</button>
+  </footer>
+
+  <div class="toast" id="toast" role="alert" hidden></div>
+  <script src="app.js"></script>
+</body>
+</html>

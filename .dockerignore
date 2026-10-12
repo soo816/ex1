@@ -1,0 +1,4 @@
+**/node_modules
+webapp/jobs
+video/out
+**/__pycache__

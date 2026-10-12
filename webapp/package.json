@@ -1,0 +1,20 @@
+{
+  "name": "card-shorts-webapp",
+  "private": true,
+  "description": "카드뉴스·대본 → 세로 쇼츠 만들기 (Remotion + Supertonic)",
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js",
+    "postinstall": "cd ../video && npm install --no-audit --no-fund"
+  },
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "@remotion/bundler": "4.0.534",
+    "@remotion/renderer": "4.0.534",
+    "express": "^4.21.2",
+    "multer": "^2.0.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "4.0.534"
+  }
+}
