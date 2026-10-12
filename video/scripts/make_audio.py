@@ -84,6 +84,18 @@ def hat():
     return noise * np.exp(-t * 80)
 
 
+def open_hat():
+    t = t_(0.18)
+    noise = np.diff(rng.uniform(-1, 1, len(t) + 1))
+    return noise * np.exp(-t * 18)
+
+
+def crash():
+    t = t_(1.2)
+    noise = np.diff(rng.uniform(-1, 1, len(t) + 1))
+    return noise * np.exp(-t * 3)
+
+
 def clap():
     t = t_(0.15)
     noise = rng.uniform(-1, 1, len(t))
@@ -102,9 +114,9 @@ def place(track, sound, at, gain=1.0):
 # ---------- 배경음악 ----------
 
 def make_bgm():
-    bpm = 120
-    beat = 60 / bpm  # 0.5초
-    bar = beat * 4  # 2초
+    bpm = 140
+    beat = 60 / bpm  # 약 0.43초
+    bar = beat * 4  # 약 1.71초
     total = 28.0
     mix = np.zeros(int(SR * (total + 1)))
 
@@ -133,39 +145,50 @@ def make_bgm():
             pluck_cache[key] = pluck(hz(m), d)
         return pluck_cache[key]
 
-    n_bars = 13  # 26초 + 마지막 엔딩
+    n_bars = 15  # 약 25.7초 + 마지막 엔딩
     for b in range(n_bars):
         start = b * bar
         root, notes = chords[b % 4]
-        intro = b < 2  # 처음 두 마디는 가볍게
-        # 우쿨렐레 스트럼: 다운-다운업-업다운업 리듬
-        for k, (pos, dirn) in enumerate([(0, 1), (1, 1), (1.5, -1), (2.5, -1), (3, 1), (3.5, -1)]):
-            order = notes if dirn > 0 else notes[::-1]
-            for s_i, m in enumerate(order):
-                place(mix, get_pluck(m, 0.9), start + pos * beat + s_i * 0.012, 0.22 if dirn > 0 else 0.15)
-        # 베이스: 1, 3박 + 당김
-        place(mix, bass(hz(root), 0.45), start, 0.55)
-        place(mix, bass(hz(root), 0.25), start + 1.5 * beat, 0.4)
-        place(mix, bass(hz(root + 7), 0.45), start + 2 * beat, 0.5)
-        place(mix, bass(hz(root + 12), 0.25), start + 3.5 * beat, 0.35)
-        # 드럼
-        if not intro:
-            for q in range(4):
-                place(mix, kick(), start + q * beat, 0.8 if q % 2 == 0 else 0.55)
-            place(mix, clap(), start + beat, 0.35)
-            place(mix, clap(), start + 3 * beat, 0.35)
-            place(mix, snare(), start + 3 * beat, 0.2)
+        intro = b == 0  # 첫 마디는 스네어 롤로 분위기 띄우기
+        # 우쿨렐레 8비트 스트럼 (다운-업 교대, 강박 강조)
         for e in range(8):
-            place(mix, hat(), start + e * beat / 2, 0.18 if e % 2 else 0.1)
-        # 멜로디: 2마디부터, 8마디 단위로 A → B
-        if b >= 2:
-            phrase = motif_a if ((b - 2) // 4) % 2 == 0 else motif_b
-            base_beat = ((b - 2) % 4) * 4
+            dirn = 1 if e % 2 == 0 else -1
+            order = notes if dirn > 0 else notes[::-1]
+            accent = 0.24 if e in (0, 3, 6) else (0.17 if dirn > 0 else 0.12)
+            for s_i, m in enumerate(order):
+                place(mix, get_pluck(m, 0.6), start + e * beat / 2 + s_i * 0.008, accent)
+        # 통통 튀는 옥타브 베이스 (8분음표)
+        for e in range(8):
+            m = root if e % 2 == 0 else root + 12
+            place(mix, bass(hz(m), 0.2), start + e * beat / 2, 0.55 if e % 2 == 0 else 0.4)
+        if intro:
+            # 점점 커지는 스네어 롤 → 다음 마디에서 빵!
+            for k in range(16):
+                place(mix, snare(), start + k * beat / 4, 0.08 + 0.02 * k)
+        else:
+            # 포 온 더 플로어 킥 + 2·4박 클랩 + 오프비트 오픈 하이햇
+            for q in range(4):
+                place(mix, kick(), start + q * beat, 0.95)
+                place(mix, open_hat(), start + (q + 0.5) * beat, 0.22)
+            place(mix, clap(), start + beat, 0.45)
+            place(mix, clap(), start + 3 * beat, 0.45)
+            for k in range(16):
+                place(mix, hat(), start + k * beat / 4, 0.14 if k % 2 else 0.08)
+            if b % 4 == 1:
+                place(mix, crash(), start, 0.35)
+            # 4마디마다 끝에서 스네어 필인
+            if b % 4 == 0:
+                for k in range(4):
+                    place(mix, snare(), start + 3 * beat + k * beat / 4, 0.18 + 0.05 * k)
+        # 멜로디: 1마디부터, 4마디 단위로 A → B
+        if b >= 1:
+            phrase = motif_a if ((b - 1) // 4) % 2 == 0 else motif_b
+            base_beat = ((b - 1) % 4) * 4
             for pos, m, d in phrase:
                 if base_beat <= pos < base_beat + 4:
-                    place(mix, glock(hz(m), d * beat + 0.3), start + (pos - base_beat) * beat, 0.32)
+                    place(mix, glock(hz(m), d * beat + 0.25), start + (pos - base_beat) * beat, 0.34)
 
-    # 엔딩: 26초에 C 코드 한 방 + 반짝임
+    # 엔딩: 마지막 마디 뒤 C 코드 한 방 + 반짝임
     end = n_bars * bar
     for s_i, m in enumerate([48, 60, 64, 67, 72, 76]):
         place(mix, pluck(hz(m), 2.0), end + s_i * 0.02, 0.3)

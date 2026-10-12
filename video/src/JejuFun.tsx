@@ -489,7 +489,7 @@ const Soundtrack: React.FC = () => {
     <>
       <Audio
         src={staticFile("audio/bgm.wav")}
-        volume={(f) => interpolate(f, [0, 10, TOTAL_FRAMES - 20, TOTAL_FRAMES], [0, 0.42, 0.42, 0], { extrapolateRight: "clamp" })}
+        volume={(f) => interpolate(f, [0, 10, TOTAL_FRAMES - 20, TOTAL_FRAMES], [0, 0.36, 0.36, 0], { extrapolateRight: "clamp" })}
       />
       {/* 인트로: 떨어져서 착지, 제목 팝 */}
       <Sfx at={16} src="boing" />
