@@ -235,10 +235,10 @@ const Hero: React.FC = () => {
     <FadeInOut dur={SCENES.hero.dur}>
       <KenBurns src="hero.jpg" dur={SCENES.hero.dur} panX={-40} />
       <PopText text="STEP 1. 제주 도착" top={180} size={100} delay={5} />
-      <div style={{ position: "absolute", left: 140, bottom: -60, transform: `translateY(${y}px) rotate(${Math.sin(frame * 0.15) * 6}deg)` }}>
+      <div style={{ position: "absolute", left: 140, bottom: 150, transform: `translateY(${y}px) rotate(${Math.sin(frame * 0.15) * 6}deg)` }}>
         <Gyuli size={480} expression={frame > 60 ? "wow" : "happy"} />
       </div>
-      <SpeechBubble text="여기가... 제주?! 😮" delay={45} x={380} y={1150} />
+      <SpeechBubble text="여기가... 제주?! 😮" delay={45} x={380} y={960} />
     </FadeInOut>
   );
 };
