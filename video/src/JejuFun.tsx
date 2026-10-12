@@ -484,10 +484,10 @@ const Sfx: React.FC<{ at: number; src: string; volume?: number }> = ({ at, src, 
   </Sequence>
 );
 
-// 배경음악 파일. 실제 악기 음원(mp3 등)을 public/audio/ 에 넣고 이 경로만 바꾸면 된다.
-const BGM_FILE = "audio/bgm.wav";
-const BGM_VOLUME = 0.36;
-const BGM_DUCKED = 0.12; // 나레이션이 나오는 동안 배경음악을 줄인다
+// 배경음악: Kevin MacLeod "Carefree" (CC BY 4.0, README.md 참고). 파일은 -14 LUFS로 맞춰 두었다.
+const BGM_FILE = "audio/bgm.mp3";
+const BGM_VOLUME = 0.6;
+const BGM_DUCKED = 0.22; // 나레이션이 나오는 동안 배경음악을 줄인다
 
 type NarrationLine = {
   id: string;
@@ -577,28 +577,21 @@ const Subtitles: React.FC = () => (
 );
 
 const Soundtrack: React.FC = () => {
-  const { hero, beach, food, tangerine, outro } = SCENES;
+  const { hero, beach, food, tangerine } = SCENES;
   return (
     <>
       <Audio src={staticFile(BGM_FILE)} volume={bgmVolume} />
       <Narration />
-      {/* 인트로: 떨어져서 착지, 제목 팝 */}
-      <Sfx at={16} src="boing" />
-      <Sfx at={20} src="pop" volume={0.5} />
-      <Sfx at={28} src="pop" volume={0.5} />
+      {/* 인트로 제목 팝 */}
+      <Sfx at={20} src="pop" volume={0.3} />
+      <Sfx at={28} src="pop" volume={0.3} />
       {/* 장면마다 STEP 제목 팝 */}
       {[hero, beach, food, tangerine].map((sc, i) => (
-        <Sfx key={i} at={sc.from + 5} src="pop" volume={0.4} />
+        <Sfx key={i} at={sc.from + 5} src="pop" volume={0.3} />
       ))}
-      <Sfx at={hero.from + 45} src="pop" />
-      <Sfx at={beach.from + 8} src="whoosh" volume={0.9} />
-      {[25, 40, 55, 70, 85].map((f) => (
-        <Sfx key={f} at={food.from + f} src="chomp" volume={0.6} />
-      ))}
-      <Sfx at={food.from + 100} src="levelup" />
-      <Sfx at={tangerine.from + 50} src="shock" volume={0.55} />
-      <Sfx at={tangerine.from + 55} src="pop" />
-      <Sfx at={outro.from + 2} src="sparkle" volume={0.7} />
+      <Sfx at={hero.from + 45} src="pop" volume={0.3} />
+      <Sfx at={beach.from + 8} src="whoosh" volume={0.6} />
+      <Sfx at={tangerine.from + 55} src="pop" volume={0.3} />
     </>
   );
 };

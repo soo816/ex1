@@ -1,22 +1,29 @@
 """나레이션 생성: narration/script.json → public/narration/*.mp3 + src/narration-manifest.json
 
-Microsoft Edge 온라인 음성(edge-tts)으로 자연스러운 한국어 리포터/나레이터 음성을 만든다.
-필요: pip install edge-tts, 그리고 speech.platform.bing.com 접속 허용.
+엔진 두 가지:
+- supertonic (기본): Supertone "Supertonic 2" 한국어 신경망 TTS를 컨테이너 안에서 직접 돌린다(ONNX, 인터넷은 첫 모델 다운로드 때만).
+  필요: pip install supertonic. 모델은 Hugging Face Supertone/supertonic-2 (OpenRAIL-M).
+- edge: Microsoft Edge 온라인 음성(edge-tts). 일반 PC에서는 잘 되지만 클라우드 세션에서는 403으로 막힌다.
+  필요: pip install edge-tts, speech.platform.bing.com 접속.
 
-사용법: python3 scripts/narrate.py [--voice ko-KR-InJoonNeural] [--rate +8%]
+만든 음성은 앞뒤 무음을 자르고 같은 음량(LOUDNESS_LUFS)으로 맞춘다.
+
+사용법: python3 scripts/narrate.py [--engine supertonic|edge] [--voice F4 | ko-KR-SunHiNeural] [--speed 1.2] [--rate +8%]
 """
 import argparse
 import asyncio
 import json
 import os
+import re
 import subprocess
-
-import edge_tts
+import tempfile
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
 SCRIPT = os.path.join(ROOT, "narration", "script.json")
 OUT_DIR = os.path.join(ROOT, "public", "narration")
 MANIFEST = os.path.join(ROOT, "src", "narration-manifest.json")
+
+LOUDNESS_LUFS = -14.0  # 쇼츠 기준 음량. 배경음악은 나레이션 동안 약 -27 LUFS로 줄어든다
 
 
 def duration_of(path):
@@ -27,36 +34,100 @@ def duration_of(path):
     return float(out.stdout.strip())
 
 
-async def synth(text, voice, rate, pitch, path):
-    communicate = edge_tts.Communicate(text, voice, rate=rate, pitch=pitch)
-    await communicate.save(path)
+def loudness_of(path):
+    out = subprocess.run(
+        ["ffmpeg", "-hide_banner", "-i", path, "-af", "ebur128", "-f", "null", "-"],
+        capture_output=True, text=True,
+    ).stderr
+    return float(re.findall(r"I:\s+(-?[\d.]+) LUFS", out)[-1])
 
 
-async def main():
+def finish(raw, path):
+    """앞뒤 무음 자르기 → 음량 맞추기 → mp3."""
+    trim = (
+        "silenceremove=start_periods=1:start_threshold=-45dB,"
+        "areverse,silenceremove=start_periods=1:start_threshold=-45dB,areverse,"
+        "adelay=30:all=1,apad=pad_dur=0.08"
+    )
+    with tempfile.TemporaryDirectory() as tmp:
+        trimmed = os.path.join(tmp, "trimmed.wav")
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", raw, "-af", trim, "-ar", "44100", trimmed], check=True)
+        gain = LOUDNESS_LUFS - loudness_of(trimmed)
+        subprocess.run(
+            ["ffmpeg", "-v", "error", "-y", "-i", trimmed,
+             "-af", f"volume={gain:.2f}dB,alimiter=limit=0.89:level=false",
+             "-ac", "1", "-ar", "44100", "-c:a", "libmp3lame", "-b:a", "128k", path],
+            check=True,
+        )
+
+
+def synth_supertonic(lines, cfg, raw_paths):
+    import numpy as np
+    from supertonic import TTS
+
+    tts = TTS(model=cfg.get("model", "supertonic-2"))
+    style = tts.get_voice_style(cfg["voice"])
+    for i, (line, raw) in enumerate(zip(lines, raw_paths)):
+        np.random.seed(cfg.get("seed", 0) + i)  # 같은 대본이면 매번 같은 음성
+        speed = line.get("speed", cfg.get("speed", 1.05))
+        wav, _ = tts.synthesize(line["text"], voice_style=style, lang="ko", speed=speed,
+                                total_steps=cfg.get("steps", 16))
+        tts.save_audio(wav, raw)
+
+
+async def synth_edge(lines, cfg, raw_paths):
+    import edge_tts
+
+    for line, raw in zip(lines, raw_paths):
+        communicate = edge_tts.Communicate(line["text"], cfg["voice"], rate=cfg.get("rate", "+0%"),
+                                           pitch=cfg.get("pitch", "+0Hz"))
+        await communicate.save(raw)
+
+
+def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--engine", choices=["supertonic", "edge"])
     parser.add_argument("--voice")
-    parser.add_argument("--rate")
+    parser.add_argument("--speed", type=float, help="supertonic 말하기 속도 (기본 script.json)")
+    parser.add_argument("--rate", help="edge-tts 말하기 속도, 예: +15%%")
     args = parser.parse_args()
 
     with open(SCRIPT, encoding="utf-8") as f:
         script = json.load(f)
-    voice = args.voice or script["voice"]
-    rate = args.rate or script.get("rate", "+0%")
-    pitch = script.get("pitch", "+0Hz")
+    engine = args.engine or script.get("engine", "supertonic")
+    cfg = dict(script[engine])
+    if args.voice:
+        cfg["voice"] = args.voice
+    if args.speed:
+        cfg["speed"] = args.speed
+    if args.rate:
+        cfg["rate"] = args.rate
 
     os.makedirs(OUT_DIR, exist_ok=True)
-    lines = []
-    for line in script["lines"]:
-        path = os.path.join(OUT_DIR, f"{line['id']}.mp3")
-        await synth(line["text"], voice, rate, pitch, path)
-        dur = duration_of(path)
-        lines.append({**line, "file": f"narration/{line['id']}.mp3", "duration": round(dur, 3)})
-        print(f"{line['id']:>10}  {dur:4.1f}s  {line['text']}")
+    lines = script["lines"]
+    with tempfile.TemporaryDirectory() as tmp:
+        ext = "wav" if engine == "supertonic" else "mp3"
+        raw_paths = [os.path.join(tmp, f"{line['id']}.{ext}") for line in lines]
+        if engine == "supertonic":
+            synth_supertonic(lines, cfg, raw_paths)
+        else:
+            asyncio.run(synth_edge(lines, cfg, raw_paths))
 
+        out = []
+        for line, raw in zip(lines, raw_paths):
+            path = os.path.join(OUT_DIR, f"{line['id']}.mp3")
+            finish(raw, path)
+            dur = duration_of(path)
+            entry = {k: v for k, v in line.items() if k != "speed"}
+            out.append({**entry, "file": f"narration/{line['id']}.mp3", "duration": round(dur, 3)})
+            print(f"{line['id']:>10}  {dur:4.2f}s  {line['text']}")
+
+    voice = f"{engine}:{cfg['voice']}"
     with open(MANIFEST, "w", encoding="utf-8") as f:
-        json.dump({"voice": voice, "lines": lines}, f, ensure_ascii=False, indent=2)
+        json.dump({"voice": voice, "lines": out}, f, ensure_ascii=False, indent=2)
+        f.write("\n")
     print("manifest ->", os.path.abspath(MANIFEST))
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
